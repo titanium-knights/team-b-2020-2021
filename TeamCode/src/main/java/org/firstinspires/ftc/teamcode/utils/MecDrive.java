@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class MecanumDrive {
+public class MecDrive {
     private String flName = CONFIG.FRONTLEFT;
     private String frName = CONFIG.FRONTRIGHT;
     private String blName = CONFIG.BACKLEFT;
@@ -24,7 +24,7 @@ public class MecanumDrive {
      * @param hardwareMap Initializes the motors based on the name from the config file
      * @param usingEncoder If true, the wheels will be set to run using encoder and vice versa
      */
-    public MecanumDrive(HardwareMap hardwareMap, boolean usingEncoder){
+    public MecDrive(HardwareMap hardwareMap, boolean usingEncoder){
         //gps = new GlobalPosition(hardwareMap,75);
         //GlobalPosition gps = new GlobalPosition(hardwareMap,75);
         //Thread pos = new Thread(gps);
@@ -84,6 +84,14 @@ public class MecanumDrive {
             power = power>0 ? 1 : -1;
         }
         setPower(-power,power,power,-power);
+    }
+    public DcMotor[] getMotors(){
+        DcMotor[] arr = new DcMotor[4];
+        arr[0] = this.fl;
+        arr[1] = this.fr;
+        arr[2] = this.bl;
+        arr[3] = this.br;
+        return arr;
     }
     public void strafeRightWithPower(double power){
         strafeLeftWithPower(-power);

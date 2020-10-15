@@ -5,6 +5,8 @@ public class CONFIG {
     public static String FRONTRIGHT = "fr";
     public static String BACKLEFT = "bl";
     public static String BACKRIGHT = "br";
+    public static String WOBBLEGOAL = "wg";
+    public static String INTAKE = "intake";
     public static String LEFTVERTICAL = "odoleft";
     public static String RIGHTVERTICAL = "odoright";
     public static String HORIZONTAL = "odohor";
