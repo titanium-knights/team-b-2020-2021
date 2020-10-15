@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class wobbleGoal {
+public class WobbleGoal {
     DcMotor elevator;
     Servo grabber;
 
-    public wobbleGoal(HardwareMap hmap) {
+    public WobbleGoal(HardwareMap hmap) {
         elevator = hmap.dcMotor.get("elevator");
         grabber = hmap.servo.get("grabber");
     }
