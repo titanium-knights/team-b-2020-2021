@@ -5,23 +5,32 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name = "My Test Op Mode")
+@TeleOp(name = "gab")
 public class TestOpMode2 extends LinearOpMode {
     @Override public void runOpMode() {
         DcMotor left = hardwareMap.dcMotor.get("left");
         DcMotor right = hardwareMap.dcMotor.get("right");
 
-        left.setDirection(DcMotor.Direction.FORWARD);
-        right.setDirection(DcMotor.Direction.REVERSE);
+        left.setDirection(DcMotorSimple.Direction.FORWARD);
+        right.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
 
         while (opModeIsActive()) {
-            if(gamepad1.a) {
-                left.setPower(0);
+            left.setPower(gamepad1.left_stick_x);
+            right.setPower(gamepad1.right_stick_y);
+            if (gamepad1.a) {
+                left.setPower(gamepad1.left_stick_x * 2);
+                right.setPower(gamepad1.right_stick_y * 2);
             }
-
-            left.setPower(gamepad1.left_stick_y);
+            if (gamepad1.b) {
+                if ((int) (Math.random()) < 1) {
+                    left.setPower(gamepad1.left_stick_x * -1);
+                }
+                else {
+                    right.setPower(gamepad1.right_stick_y * -1);
+                }
+            }
         }
     }
 }
