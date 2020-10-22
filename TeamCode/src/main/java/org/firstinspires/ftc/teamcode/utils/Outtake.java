@@ -6,15 +6,14 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Outtake {
 
-    DcMotor flywheel;
     DcMotor shooter;
+    //DcMotor angle;
     Servo push;
 
     public Outtake(HardwareMap hmap) {
-        flywheel = hmap.dcMotor.get("flywheel");
-        shooter = hmap.dcMotor.get("shooter");
-        push = hmap.servo.get("push");
-
+        shooter = hmap.dcMotor.get(CONFIG.SHOOTER);
+        //angle = hmap.dcMotor.get(CONFIG.ANGLE);
+        push = hmap.servo.get(CONFIG.PUSH);
     }
 
     public void pushRing() {
@@ -23,11 +22,11 @@ public class Outtake {
     }
 
     public void setFlywheelSpeed(double x) {
-        flywheel.setPower(x);
+        shooter.setPower(x);
     }
 
     public void spin() {
-        flywheel.setPower(.5);
+        shooter.setPower(.5);
     }
 
 }

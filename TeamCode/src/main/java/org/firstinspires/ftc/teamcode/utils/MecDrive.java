@@ -93,6 +93,11 @@ public class MecDrive {
         arr[3] = this.br;
         return arr;
     }
+    public void turnRightXDegrees(IMU imu, double deg){
+        double initAngle = imu.getZAngle();
+        double setPoint = initAngle+180;
+        //if(setPoint<)
+    }
     public void strafeRightWithPower(double power){
         strafeLeftWithPower(-power);
     }

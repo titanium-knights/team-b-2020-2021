@@ -24,8 +24,8 @@ public class MecDriveWLib {
      * Function to initialize Mecanum Drive
      * @param hardwareMap Initializes the motors based on the name from the config file
      * @param usingEncoder If true, the wheels will be set to run using encoder and vice versa
-     */
-    public MecDriveWLib(HardwareMap hardwareMap, boolean usingEncoder){
+    */
+   public MecDriveWLib(HardwareMap hardwareMap, boolean usingEncoder){
         //gps = new GlobalPosition(hardwareMap,75);
         //GlobalPosition gps = new GlobalPosition(hardwareMap,75);
         //Thread pos = new Thread(gps);

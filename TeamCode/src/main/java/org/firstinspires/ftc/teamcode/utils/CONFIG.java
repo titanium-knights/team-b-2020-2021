@@ -5,7 +5,14 @@ public class CONFIG {
     public static String FRONTRIGHT = "fr";
     public static String BACKLEFT = "bl";
     public static String BACKRIGHT = "br";
+    public static String FRONTDIST = "front";
+    public static String BACKDIST = "back";
+    public static String LEFTDIST = "left";
+    public static String RIGHTDIST = "right";
     public static String WOBBLEGOAL = "wg";
+    public static String ANGLE = "angle";
+    public static String SHOOTER = "shooter";
+    public static String PUSH = "push";
     public static String INTAKE = "intake";
     public static String LEFTVERTICAL = "odoleft";
     public static String RIGHTVERTICAL = "odoright";
