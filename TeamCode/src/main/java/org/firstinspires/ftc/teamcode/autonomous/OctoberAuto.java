@@ -47,7 +47,7 @@ public class OctoberAuto extends LinearOpMode {
         drive.turnRightXDegrees(imu,180);
         outtake.setFlywheelSpeed(calc.getLinearVelocity());
         //Once it is at that speed
-        outtake.pushRing();
+        //outtake.pushRing();
         //while(left.getDistance(DistanceUnit.INCH)<)
     }
     public void driveToPowerShotZone(){

@@ -44,7 +44,7 @@ public class TeleOp2 extends LinearOpMode {
             }
             intake.stop();
             if (gamepad2.b) {
-                outtake.pushRing();
+                //outtake.pushRing();
                 outtake.setFlywheelSpeed(gamepad2.left_stick_y);
                 outtake.spin();
             }

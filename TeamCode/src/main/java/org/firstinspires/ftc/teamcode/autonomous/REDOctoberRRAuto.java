@@ -108,8 +108,8 @@ public class REDOctoberRRAuto extends LinearOpMode {
         }
     }
     public void shootRing(){
-        outtake.pushRing();
-        outtake.pullRing();
+        //outtake.pushRing();
+        //outtake.pullRing();
     }
     public void initialize(){
         drive = new SampleMecanumDrive(hardwareMap);

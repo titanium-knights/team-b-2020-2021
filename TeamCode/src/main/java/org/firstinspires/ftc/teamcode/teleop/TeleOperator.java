@@ -46,7 +46,7 @@ public class TeleOperator extends LinearOpMode {
             }
 
             if (gamepad1.y) {
-                out.pushRing();
+                //out.pushRing();
                 out.setFlywheelSpeed(1);
                 out.spin();
             }
