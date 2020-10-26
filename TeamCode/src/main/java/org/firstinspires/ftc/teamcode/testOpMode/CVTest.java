@@ -17,7 +17,7 @@ public class CVTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         RingDetector detector = new RingDetector(telemetry);
@@ -38,7 +38,9 @@ public class CVTest extends LinearOpMode {
 
 
         waitForStart();
-        while (opModeIsActive()) { }
+        while (opModeIsActive()) {
+            telemetry.addData("state",detector.getState());
+        }
         phoneCam.stopStreaming();
     }
 }

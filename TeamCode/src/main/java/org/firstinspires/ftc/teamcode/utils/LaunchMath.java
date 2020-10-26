@@ -26,4 +26,8 @@ public class LaunchMath {
         double vx = this.distanceToGoal/time;
         return Math.atan2(vy,vx);
     }
+    public double MSToTPS(double v){
+        double circum = CONFIG.shooterDiameter*Math.PI;
+        return v*(CONFIG.countsPerRev/circum);
+    }
 }

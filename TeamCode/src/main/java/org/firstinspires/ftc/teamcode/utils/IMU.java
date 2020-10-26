@@ -24,4 +24,10 @@ public class IMU {
     public double getZAngle(){
         return (-imu.getAngularOrientation().firstAngle);
     }
+    public double getYAngle(){
+        return (-imu.getAngularOrientation().secondAngle);
+    }
+    public double getXAngle(){
+        return (-imu.getAngularOrientation().thirdAngle);
+    }
 }

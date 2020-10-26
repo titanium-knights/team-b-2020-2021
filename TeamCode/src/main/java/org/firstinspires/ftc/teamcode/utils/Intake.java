@@ -8,14 +8,14 @@ public class Intake {
     DcMotor intakeMotor;
 
     public Intake(HardwareMap hmap) {
-        this.intakeMotor = hmap.dcMotor.get("intakeMotor");
+        this.intakeMotor = hmap.dcMotor.get(CONFIG.INTAKE);
     }
 
-    void spin() {
+    public void spin() {
         intakeMotor.setPower(1);
     }
 
-    void stop() {
+    public void stop() {
         intakeMotor.setPower(0);
     }
 

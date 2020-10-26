@@ -26,35 +26,43 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
 public class REDOctoberRRAuto extends LinearOpMode {
-    SampleMecanumDrive drive;
-    Intake intake;
-    Outtake outtake;
-    LaunchMath lm;
-    IMU imu;
-    DistanceSensor back;
-    DistanceSensor right;
-    DistanceSensor left;
-    OpenCvCamera phoneCam;
-    RingDetector detector;
-    WobbleGoal wg;
-    RingAmount.Rings state;
-    Pose2d startPose;
-    Pose2d rightPS = new Pose2d();
-    Pose2d leftPS;
-    Pose2d centerPS;
+    private SampleMecanumDrive drive;
+    private Intake intake;
+    private Outtake outtake;
+    private LaunchMath lm;
+    private IMU imu;
+    private DistanceSensor back;
+    private DistanceSensor right;
+    private DistanceSensor left;
+    private OpenCvCamera phoneCam;
+    private RingDetector detector;
+    private WobbleGoal wg;
+    private RingAmount.Rings state;
+    private Pose2d startPose;
+
+    private Vector2d leftVector = new Vector2d(-12,-6);
+    private Vector2d centerVector = new Vector2d(-12,-12);
+    private Vector2d rightVector = new Vector2d(-12,-18);
+
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
-        Trajectory startToPowerShot = drive.trajectoryBuilder(startPose)
-                .splineTo(new Vector2d(0,-24), Math.toRadians(-90.0))
+        Trajectory startToPowerShotRight = drive.trajectoryBuilder(startPose)
+                .splineTo(rightVector, Math.toRadians(-90.0))
                 .build();
-        Trajectory powerShotToA = drive.trajectoryBuilder(startToPowerShot.end())
+        Trajectory powerShotRightToCenter = drive.trajectoryBuilder(startToPowerShotRight.end())
+                .splineTo(centerVector, Math.toRadians(-90.0))
+                .build();
+        Trajectory powerShotCenterToLeft = drive.trajectoryBuilder(powerShotRightToCenter.end())
+                .splineTo(leftVector, Math.toRadians(-90.0))
+                .build();
+        Trajectory powerShotToA = drive.trajectoryBuilder(powerShotCenterToLeft.end())
                 .splineTo(new Vector2d(0,-50), Math.toRadians(180.0))
                 .build();
-        Trajectory powerShotToB = drive.trajectoryBuilder(startToPowerShot.end())
+        Trajectory powerShotToB = drive.trajectoryBuilder(powerShotCenterToLeft.end())
                 .splineTo(new Vector2d(33,-36), Math.toRadians(180.0))
                 .build();
-        Trajectory powerShotToC = drive.trajectoryBuilder(startToPowerShot.end())
+        Trajectory powerShotToC = drive.trajectoryBuilder(powerShotCenterToLeft.end())
                 .splineTo(new Vector2d(50,-50), Math.toRadians(180.0))
                 .build();
         Pose2d endOfABorC;
@@ -65,8 +73,15 @@ public class REDOctoberRRAuto extends LinearOpMode {
         sleep(500);
         wg.stop();
         while(opModeIsActive()){
-            drive.followTrajectory(startToPowerShot);
+            drive.followTrajectory(startToPowerShotRight);
             outtake.setFlywheelSpeed(lm.getLinearVelocity());
+            shootRing();
+            drive.followTrajectory(powerShotRightToCenter);
+            outtake.setFlywheelSpeed(lm.getLinearVelocity());
+            shootRing();
+            drive.followTrajectory(powerShotCenterToLeft);
+            shootRing();
+            endOfABorC = powerShotToA.end();
             switch(state){
                 case ZERO:
                     //position A
@@ -85,12 +100,16 @@ public class REDOctoberRRAuto extends LinearOpMode {
                     break;
             }
             wg.release();
-            Trajectory parkOnLine = drive.trajectoryBuilder(startToPowerShot.end())
+            Trajectory parkOnLine = drive.trajectoryBuilder(endOfABorC)
                     .splineTo(new Vector2d(0,-24), Math.toRadians(180.0))
                     .build();
             drive.followTrajectory(parkOnLine);
             break;
         }
+    }
+    public void shootRing(){
+        outtake.pushRing();
+        outtake.pullRing();
     }
     public void initialize(){
         drive = new SampleMecanumDrive(hardwareMap);

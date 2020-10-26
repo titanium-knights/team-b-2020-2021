@@ -51,7 +51,7 @@ import static org.firstinspires.ftc.teamcode.utils.RRQuickStart.drive.DriveConst
 @Config
 @Autonomous(group = "drive")
 public class DriveVelocityPIDTuner extends LinearOpMode {
-    public static double DISTANCE = 72; // in
+    public static double DISTANCE = 60; // in
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
