@@ -38,7 +38,7 @@ public class IntakeShooterServoTester extends OpMode {
         buttonY.update(gamepad1.y);
         buttonX.ifRelease(gamepad1.x);
         buttonX.update(gamepad1.x);
-        if(buttonA.getMode()){
+        if(gamepad1.a){
             intake.spin();
         }
         else{
