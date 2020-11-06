@@ -14,11 +14,13 @@ public class DriveEnc extends LinearOpMode {
         bl = hardwareMap.get(DcMotorEx.class,"bl");
         br = hardwareMap.get(DcMotorEx.class,"br");
         waitForStart();
-        telemetry.addData("fl",fl.getCurrentPosition());
-        telemetry.addData("fr",fr.getCurrentPosition());
-        telemetry.addData("bl",bl.getCurrentPosition());
-        telemetry.addData("br",br.getCurrentPosition());
-        telemetry.update();
+        while(opModeIsActive()) {
+            telemetry.addData("fl", fl.getCurrentPosition());
+            telemetry.addData("fr", fr.getCurrentPosition());
+            telemetry.addData("bl", bl.getCurrentPosition());
+            telemetry.addData("br", br.getCurrentPosition());
+            telemetry.update();
+        }
     }
 
 }
