@@ -47,9 +47,18 @@ public class RoboCentricSingleGP extends OpMode {
             wg.lower();
         }
         else{
-            wg.stop();
+            wg.stopElevator();
         }
 
+        if(gamepad1.dpad_up){
+            wg.grab();
+        }
+        else if(gamepad1.dpad_down){
+            wg.release();
+        }
+        else{
+            wg.stopServo();
+        }
         if(gamepad1.y){
             out.spin();
         }

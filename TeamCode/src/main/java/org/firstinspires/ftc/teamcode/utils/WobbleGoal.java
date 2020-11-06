@@ -1,26 +1,27 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class WobbleGoal {
     DcMotor elevator;
-    Servo grabber;
+    CRServo grabber;
 
     public WobbleGoal(HardwareMap hmap) {
         elevator = hmap.dcMotor.get("elevator");
-        grabber = hmap.servo.get("grabber");
+        grabber = hmap.get(CRServo.class,"grabber");
         elevator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void grab() {
-        grabber.setPosition(1);
+        grabber.setPower(1);
     }
 
     public void release() {
-        grabber.setPosition(0);
+        grabber.setPower(-1);
     }
 
     public void lift() {
@@ -31,7 +32,11 @@ public class WobbleGoal {
         elevator.setPower(-0.3);
     }
 
-    public void stop() {
+    public void stopElevator() {
         elevator.setPower(0);
+    }
+
+    public void stopServo(){
+        grabber.setPower(0);
     }
 }
