@@ -66,10 +66,10 @@ public class RoboCentricSingleGP extends OpMode {
             out.stop();
         }
 
-        if(gamepad1.dpad_up){
+        if(gamepad1.dpad_left){
             servo.setPosition(0.5);
         }
-        else if(gamepad1.dpad_down){
+        else if(gamepad1.dpad_right){
             servo.setPosition(1);
         }
         telemetry.addData("leftx",gamepad1.left_stick_x);
