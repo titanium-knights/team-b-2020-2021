@@ -39,4 +39,9 @@ public class WobbleGoal {
     public void stopServo(){
         grabber.setPower(0);
     }
+    public void stop(){
+        elevator.setPower(0);
+        grabber.setPower(0);
+    }
+
 }
