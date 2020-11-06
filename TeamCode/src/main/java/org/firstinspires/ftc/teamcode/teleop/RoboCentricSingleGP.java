@@ -56,16 +56,14 @@ public class RoboCentricSingleGP extends OpMode {
         else if(gamepad1.dpad_down){
             wg.release();
         }
-        else{
-            wg.stopServo();
-        }
+
+        
         if(gamepad1.y){
             out.spin();
         }
         if(gamepad1.b){
             out.stop();
         }
-
         if(gamepad1.dpad_left){
             servo.setPosition(0.5);
         }
