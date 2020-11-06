@@ -30,6 +30,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
+import org.firstinspires.ftc.teamcode.utils.CONFIG;
 import org.firstinspires.ftc.teamcode.utils.RRQuickStart.util.DashboardUtil;
 import org.firstinspires.ftc.teamcode.utils.RRQuickStart.util.LynxModuleUtil;
 
@@ -128,10 +129,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         // upward (normal to the floor) using a command like the following:
         // BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
-        rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotorEx.class, CONFIG.FRONTLEFT);
+        leftRear = hardwareMap.get(DcMotorEx.class, CONFIG.BACKLEFT);
+        rightRear = hardwareMap.get(DcMotorEx.class, CONFIG.BACKRIGHT);
+        rightFront = hardwareMap.get(DcMotorEx.class, CONFIG.FRONTRIGHT);
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
