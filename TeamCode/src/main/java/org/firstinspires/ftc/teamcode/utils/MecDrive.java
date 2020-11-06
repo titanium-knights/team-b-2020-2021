@@ -39,6 +39,7 @@ public class MecDrive {
 
         this.bl = hardwareMap.get(DcMotor.class, blName);
         this.bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.br = hardwareMap.get(DcMotor.class, brName);
         this.br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

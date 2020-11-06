@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.utils.IMU;
 import org.firstinspires.ftc.teamcode.utils.Intake;
 import org.firstinspires.ftc.teamcode.utils.Outtake;
 import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 
+@TeleOp(name = "FieldCentricSingle")
 public class FieldCentricSingleGP extends OpMode {
     MecanumDrive drive;
     Motor fl; //front left
@@ -22,10 +24,11 @@ public class FieldCentricSingleGP extends OpMode {
     IMU imu;
     @Override
     public void init() {
-        fl = (Motor) hardwareMap.dcMotor.get("fl");
-        fr = (Motor) hardwareMap.dcMotor.get("fr");
-        bl = (Motor) hardwareMap.dcMotor.get("bl");
-        br = (Motor) hardwareMap.dcMotor.get("br");
+        fl = new Motor(hardwareMap,"fl");
+        fr = new Motor(hardwareMap,"fr");
+        bl = new Motor(hardwareMap,"bl");
+        br = new Motor(hardwareMap,"br");
+
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         drive = new MecanumDrive(fl,fr,bl,br);
@@ -45,7 +48,7 @@ public class FieldCentricSingleGP extends OpMode {
             intake.stop();
         }
 
-        if(gamepad1.dpad_up){
+        /*if(gamepad1.dpad_up){
             wg.grab();
         }
         else if(gamepad1.dpad_down){
@@ -53,7 +56,18 @@ public class FieldCentricSingleGP extends OpMode {
         }
         else{
             wg.stop();
+        }*/
+
+        if(Math.abs(gamepad1.left_trigger)>0.3){
+            wg.lift();
         }
+        else if(Math.abs(gamepad1.right_trigger)>0.3){
+            wg.lower();
+        }
+        else{
+            wg.stop();
+        }
+
         if(gamepad1.y){
             outtake.spin();
         }
