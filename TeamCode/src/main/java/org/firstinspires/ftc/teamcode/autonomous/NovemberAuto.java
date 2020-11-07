@@ -32,7 +32,7 @@ public class NovemberAuto extends LinearOpMode {
     private RingDetector detector;
     private RingAmount.Rings state;
     public void initialize() {
-        front = hardwareMap.get(DistanceSensor.class, CONFIG.BACKDIST);
+        front = hardwareMap.get(DistanceSensor.class, CONFIG.FRONTDIST);
         left = hardwareMap.get(DistanceSensor.class, CONFIG.LEFTDIST);
         //right = hardwareMap.get(DistanceSensor.class, CONFIG.RIGHTDIST);
         imu = new IMU(hardwareMap);
