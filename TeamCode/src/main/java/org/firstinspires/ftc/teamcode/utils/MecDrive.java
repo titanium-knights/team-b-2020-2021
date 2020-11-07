@@ -81,7 +81,7 @@ public class MecDrive {
         if(Math.abs(power)>1){
             power = power>0 ? 1 : -1;
         }
-        setPower(power,power,power,power);
+        setPower(-power,-power,-power,-power);
     }
     public void backwardWithPower(double power){
         forwardWithPower(-power);
