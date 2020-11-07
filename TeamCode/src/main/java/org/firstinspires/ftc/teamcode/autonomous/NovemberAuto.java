@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.utils.CONFIG;
@@ -34,6 +35,7 @@ public class NovemberAuto extends LinearOpMode {
     public void initialize() {
         front = hardwareMap.get(DistanceSensor.class, CONFIG.FRONTDIST);
         left = hardwareMap.get(DistanceSensor.class, CONFIG.LEFTDIST);
+        out = new Outtake(hardwareMap);
         //right = hardwareMap.get(DistanceSensor.class, CONFIG.RIGHTDIST);
         imu = new IMU(hardwareMap);
         drive = new MecDrive(hardwareMap,false);
