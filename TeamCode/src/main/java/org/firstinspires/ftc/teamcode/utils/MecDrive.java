@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 //import org.firstinspires.ftc.teamcode.utils.odometry.GlobalPosition;
 
@@ -12,10 +14,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class MecDrive {
+    private double HEADING_THRESHOLD = 1;
+    private double P_TURN_COEFF = 0.1;
     private String flName = CONFIG.FRONTLEFT;
     private String frName = CONFIG.FRONTRIGHT;
     private String blName = CONFIG.BACKLEFT;
     private String brName = CONFIG.BACKRIGHT;
+    private IMU imu;
     //GlobalPosition gps;
     private DcMotor fl, fr,bl,br;
 
@@ -56,7 +61,9 @@ public class MecDrive {
             this.br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
     }
-
+    public void setIMU(IMU imu){
+        this.imu = imu;
+    }
     public void setRunMode(DcMotor.RunMode runMode){
         this.fl.setMode(runMode);
         this.fr.setMode(runMode);
@@ -216,5 +223,114 @@ public class MecDrive {
     }
     public double a(double b){
         return Math.abs(b);
-    }   
+    }
+    public void turnRightWithPower(double p){
+        fl.setPower(p);
+        bl.setPower(p);
+        fr.setPower(-p);
+        br.setPower(-p);
+    }
+
+    public void gyroTurn (double speed, double angle) {
+
+        // keep looping while we are still active, and not on heading.
+        while (!onHeading(speed, angle, P_TURN_COEFF)) {
+        }
+    }
+
+    /**
+     *  Method to obtain & hold a heading for a finite amount of time
+     *  Move will stop once the requested time has elapsed
+     *
+     * @param speed      Desired speed of turn.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     * @param holdTime   Length of time (in seconds) to hold the specified heading.
+     */
+    public void gyroHold( double speed, double angle, double holdTime) {
+
+        ElapsedTime holdTimer = new ElapsedTime();
+
+        // keep looping while we have time remaining.
+        holdTimer.reset();
+        while ((holdTimer.time() < holdTime)) {
+            // Update telemetry & Allow time for other processes to run.
+            onHeading(speed, angle, P_TURN_COEFF);
+        }
+
+        // Stop all motion;
+        fl.setPower(0);
+        fr.setPower(0);
+        bl.setPower(0);
+        br.setPower(0);
+    }
+
+    /**
+     * Perform one cycle of closed loop heading control.
+     *
+     * @param speed     Desired speed of turn.
+     * @param angle     Absolute Angle (in Degrees) relative to last gyro reset.
+     *                  0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                  If a relative angle is required, add/subtract from current heading.
+     * @param PCoeff    Proportional Gain coefficient
+     * @return
+     */
+    boolean onHeading(double speed, double angle, double PCoeff) {
+        double   error ;
+        double   steer ;
+        boolean  onTarget = false ;
+        double leftSpeed;
+        double rightSpeed;
+
+        // determine turn power based on +/- error
+        error = getError(angle);
+
+        if (Math.abs(error) <= HEADING_THRESHOLD) {
+            steer = 0.0;
+            leftSpeed  = 0.0;
+            rightSpeed = 0.0;
+            onTarget = true;
+        }
+        else {
+            steer = getSteer(error, PCoeff);
+            rightSpeed  = speed * steer;
+            leftSpeed   = -rightSpeed;
+        }
+
+        // Send desired speeds to motors.
+        fl.setPower(leftSpeed);
+        bl.setPower(leftSpeed);
+        fr.setPower(rightSpeed);
+        br.setPower(rightSpeed);
+
+        return onTarget;
+    }
+
+    /**
+     * getError determines the error between the target angle and the robot's current heading
+     * @param   targetAngle  Desired angle (relative to global reference established at last Gyro Reset).
+     * @return  error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
+     *          +ve error means the robot should turn LEFT (CCW) to reduce error.
+     */
+    public double getError(double targetAngle) {
+
+        double robotError;
+
+        // calculate error in -179 to +180 range  (
+        robotError = targetAngle - imu.getZAngle();
+        while (robotError > 180)  robotError -= 360;
+        while (robotError <= -180) robotError += 360;
+        return robotError;
+    }
+
+    /**
+     * returns desired steering force.  +/- 1 range.  +ve = steer left
+     * @param error   Error angle in robot relative degrees
+     * @param PCoeff  Proportional Gain Coefficient
+     * @return
+     */
+    public double getSteer(double error, double PCoeff) {
+        return Range.clip(error * PCoeff, -1, 1);
+    }
 }

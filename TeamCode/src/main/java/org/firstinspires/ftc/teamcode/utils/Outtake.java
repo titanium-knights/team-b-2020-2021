@@ -8,10 +8,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Outtake {
 
     DcMotorEx shooter;
-
+    Servo pusher;
     public Outtake(HardwareMap hmap) {
         shooter = hmap.get(DcMotorEx.class, CONFIG.SHOOTER);
         shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pusher = hmap.get(Servo.class, CONFIG.PUSH);
 
     }
     public void setPIDF(){
@@ -32,6 +33,12 @@ public class Outtake {
     }
     public void stop(){
         shooter.setPower(0);
+    }
+    public void push(){
+        pusher.setPosition(0.5);
+    }
+    public void pull(){
+        pusher.setPosition(1);
     }
 
 }

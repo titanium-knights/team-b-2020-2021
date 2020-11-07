@@ -57,7 +57,7 @@ public class RoboCentricSingleGP extends OpMode {
             wg.release();
         }
 
-        
+
         if(gamepad1.y){
             out.spin();
         }
