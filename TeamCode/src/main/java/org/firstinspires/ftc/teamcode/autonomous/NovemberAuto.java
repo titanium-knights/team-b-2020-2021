@@ -24,7 +24,7 @@ public class NovemberAuto extends LinearOpMode {
     MecDrive drive;
     DistanceSensor front;
     DistanceSensor left;
-    DistanceSensor right;
+    //DistanceSensor right;
     IMU imu;
     WobbleGoal wg;
     Outtake out;
@@ -34,7 +34,7 @@ public class NovemberAuto extends LinearOpMode {
     public void initialize() {
         front = hardwareMap.get(DistanceSensor.class, CONFIG.BACKDIST);
         left = hardwareMap.get(DistanceSensor.class, CONFIG.LEFTDIST);
-        right = hardwareMap.get(DistanceSensor.class, CONFIG.RIGHTDIST);
+        //right = hardwareMap.get(DistanceSensor.class, CONFIG.RIGHTDIST);
         imu = new IMU(hardwareMap);
         drive = new MecDrive(hardwareMap,false);
         wg = new WobbleGoal(hardwareMap);
@@ -85,7 +85,7 @@ public class NovemberAuto extends LinearOpMode {
     public void doZeroRingsAuto(){
         driveForwards();
         shootThreePowerShots();
-        driveToZero();
+        //driveToZero();
         releaseWG();
 
         //parkOnLineFromZero();
@@ -100,7 +100,7 @@ public class NovemberAuto extends LinearOpMode {
     public void doFourRingsAuto(){
         driveForwards();
         shootThreePowerShots();
-        driveToFour();
+        //driveToFour();
         releaseWG();
         parkOnLine();
     }
@@ -144,7 +144,7 @@ public class NovemberAuto extends LinearOpMode {
         out.stop();
     }
 
-    public void driveToZero(){
+   /* public void driveToZero(){
         drive.gyroTurn(.5,180);
         while(getD(right)>18){
             if(getD(right)>30){
@@ -157,7 +157,7 @@ public class NovemberAuto extends LinearOpMode {
         drive.forwardWithPower(0.5);
         sleep(500);
         drive.stop();
-    }
+    }*/
     public void driveToOne(){
         drive.gyroTurn(.5,180);
         while(getD(front)>36){
@@ -165,7 +165,7 @@ public class NovemberAuto extends LinearOpMode {
         }
         drive.stop();
     }
-    public void driveToFour(){
+    /*public void driveToFour(){
         drive.gyroTurn(.5,180);
         while(getD(right)>18){
             if(getD(right)>30){
@@ -187,7 +187,7 @@ public class NovemberAuto extends LinearOpMode {
             }
         }
         drive.stop();
-    }
+    }*/
     public void parkOnLineFromZero(){
         drive.strafeLeftWithPower(0.5);
         sleep(500);
