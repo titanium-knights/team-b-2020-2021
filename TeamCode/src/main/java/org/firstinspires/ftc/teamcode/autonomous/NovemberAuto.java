@@ -45,7 +45,7 @@ public class NovemberAuto extends LinearOpMode {
         wg.stopElevator();
 
 
-        telemetry.addLine("Starting camera init");
+        /*telemetry.addLine("Starting camera init");
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
         detector = new RingDetector(telemetry);
@@ -57,7 +57,8 @@ public class NovemberAuto extends LinearOpMode {
             }
         });
         FtcDashboard.getInstance().startCameraStream(phoneCam,15);
-        state = detector.getState();
+        state = detector.getState();*/
+        state = RingAmount.Rings.ZERO;
         telemetry.addData("State:",state);
         telemetry.addLine("Finished Initialization");
         telemetry.update();
