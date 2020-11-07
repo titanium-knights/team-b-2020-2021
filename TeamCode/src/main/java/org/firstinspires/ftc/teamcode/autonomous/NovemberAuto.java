@@ -110,7 +110,7 @@ public class NovemberAuto extends LinearOpMode {
     public void driveForwards(){
         while(getD(front)<60){
             if(getD(front)<20){
-                drive.forwardWithPower(-1);
+                drive.forwardWithPower(-.5);
             }
             else if(getD(front)<40){
                 drive.forwardWithPower(-.5);
