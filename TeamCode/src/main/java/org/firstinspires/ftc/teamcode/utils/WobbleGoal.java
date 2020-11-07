@@ -17,19 +17,19 @@ public class WobbleGoal {
     }
 
     public void grab() {
-        grabber.setPower(1);
-    }
-
-    public void release() {
         grabber.setPower(-1);
     }
 
+    public void release() {
+        grabber.setPower(1);
+    }
+
     public void lift() {
-        elevator.setPower(0.3);
+        elevator.setPower(-0.3);
     }
 
     public void lower() {
-        elevator.setPower(-0.3);
+        elevator.setPower(0.3);
     }
 
     public void stopElevator() {

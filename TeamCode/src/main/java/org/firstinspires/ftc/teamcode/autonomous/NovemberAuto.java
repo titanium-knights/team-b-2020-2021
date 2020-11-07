@@ -116,9 +116,11 @@ public class NovemberAuto extends LinearOpMode {
                 drive.forwardWithPower(-.5);
             }
             else{
-                drive.forwardWithPower(-.3);
+                drive.forwardWithPower(-.4);
             }
         }
+        drive.stop();
+
     }
     public void shootThreePowerShots(){
         while(getD(left)<45){
@@ -129,18 +131,18 @@ public class NovemberAuto extends LinearOpMode {
                 drive.strafeRightWithPower(.5);
             }
             else{
-                drive.strafeRightWithPower(.3);
+                drive.strafeRightWithPower(.5);
             }
         }
         drive.stop();
         shoot();
         while(getD(left)<52.5){
-            drive.strafeRightWithPower(.3);
+            drive.strafeRightWithPower(.5);
         }
         drive.stop();
         shoot();
         while(getD(left)<60){
-            drive.strafeRightWithPower(.3);
+            drive.strafeRightWithPower(.5);
         }
         drive.stop();
         shoot();
