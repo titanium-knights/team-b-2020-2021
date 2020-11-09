@@ -29,7 +29,7 @@ public class Outtake {
     }
 
     public void spin() {
-        shooter.setPower(1);
+        shooter.setPower(.125);
     }
     public void stop(){
         shooter.setPower(0);

@@ -77,6 +77,14 @@ public class MecDrive {
         this.bl.setPower(bl);
         this.br.setPower(br);
     }
+    public void setPowerToLeftDrive(double power){
+        this.fl.setPower(power);
+        this.bl.setPower(power);
+    }
+    public void setPowerToRightDrive(double power){
+        this.fr.setPower(power);
+        this.br.setPower(power);
+    }
     public void forwardWithPower(double power){
         if(Math.abs(power)>1){
             power = power>0 ? 1 : -1;
