@@ -20,7 +20,6 @@ public class MecDrive {
     private String frName = CONFIG.FRONTRIGHT;
     private String blName = CONFIG.BACKLEFT;
     private String brName = CONFIG.BACKRIGHT;
-    private IMU imu;
     //GlobalPosition gps;
     private DcMotor fl, fr,bl,br;
 
@@ -37,17 +36,19 @@ public class MecDrive {
 
         this.fl = hardwareMap.get(DcMotor.class, flName);
         this.fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.fl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.fr = hardwareMap.get(DcMotor.class, frName);
         this.fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.fr.setDirection(DcMotorSimple.Direction.REVERSE);
+
 
         this.bl = hardwareMap.get(DcMotor.class, blName);
         this.bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.br = hardwareMap.get(DcMotor.class, brName);
         this.br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.br.setDirection(DcMotorSimple.Direction.REVERSE);
+
         if(usingEncoder){
             this.fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             this.fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -61,9 +62,7 @@ public class MecDrive {
             this.br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
     }
-    public void setIMU(IMU imu){
-        this.imu = imu;
-    }
+
     public void setRunMode(DcMotor.RunMode runMode){
         this.fl.setMode(runMode);
         this.fr.setMode(runMode);
@@ -77,6 +76,9 @@ public class MecDrive {
         this.bl.setPower(bl);
         this.br.setPower(br);
     }
+    public void setPower(double[] arr){
+        setPower(arr[0],arr[1],arr[2],arr[3]);
+    }
     public void setPowerToLeftDrive(double power){
         this.fl.setPower(power);
         this.bl.setPower(power);
@@ -89,7 +91,7 @@ public class MecDrive {
         if(Math.abs(power)>1){
             power = power>0 ? 1 : -1;
         }
-        setPower(-power,-power,-power,-power);
+        setPower(power,power,power,power);
     }
     public void backwardWithPower(double power){
         forwardWithPower(-power);
@@ -98,7 +100,7 @@ public class MecDrive {
         if(Math.abs(power)>1){
             power = power>0 ? 1 : -1;
         }
-        setPower(power,-power,-power,power);
+        setPower(-power,power,power,-power);
     }
     public DcMotor[] getMotors(){
         DcMotor[] arr = new DcMotor[4];
@@ -166,8 +168,8 @@ public class MecDrive {
         teleopTank(g1,1);
     }
     public void teleopTank(Gamepad g1,double speedModifier){
-        double right = g1.right_stick_y*speedModifier;
-        double left = g1.left_stick_y*speedModifier;
+        double right = (-g1.right_stick_y)*speedModifier;
+        double left = (-g1.left_stick_y)*speedModifier;
         double strafeLeft =g1.left_trigger;
         double strafeRight = g1.right_trigger;
         if(Math.abs(left)>0.1 || Math.abs(right)>0.1){
@@ -198,14 +200,31 @@ public class MecDrive {
         }
 
     }
-    public void fieldCentricDrive(Gamepad gamepad1, double angle){
-        double forward = gamepad1.left_stick_y;
-        double strafe = gamepad1.left_stick_x;
-        double turn = gamepad1.right_stick_x;
-        angle = Math.toRadians(angle);
-        double x = forward*Math.cos(angle) + strafe*Math.sin(angle);
-        double y = -forward*Math.sin(angle)+strafe*Math.cos(angle);
-        XYCorrection(x,y,turn);
+    public void driveFieldCentric(Gamepad gamepad1, IMU imu){
+        double angle = Math.toRadians(imu.getZAngle());
+        double inputY = -gamepad1.left_stick_y;
+        double inputX = gamepad1.left_stick_x;
+        double rx = gamepad1.right_stick_x;
+        double x = Math.cos(angle) * inputX - Math.sin(angle) * inputY;
+        double y = Math.sin(angle) * inputX + Math.cos(angle) * inputY;
+        double flPower = y + x + rx;
+        double blPower = y - x + rx;
+        double frPower = y -x - rx;
+        double brPower = y + x - rx;
+        //fl,fr,bl,br
+        double[] powerArr={flPower,frPower,blPower,brPower};
+        double max = Arrays.stream(powerArr).max().getAsDouble();
+        double min = Arrays.stream(powerArr).min().getAsDouble();
+        max = Math.max(Math.abs(max),Math.abs(min));
+        if (max>1) {
+            // Divide everything by max (it's positive so we don't need to worry
+            // about signs)
+            for(int i=0;i<powerArr.length;i++){
+                powerArr[i]/=max;
+            }
+        }
+        setPower(powerArr);
+
     }
     public void stop(){
         setPower(0.0,0.0,0.0,0.0);
@@ -239,106 +258,4 @@ public class MecDrive {
         br.setPower(-p);
     }
 
-    public void gyroTurn (double speed, double angle) {
-
-        // keep looping while we are still active, and not on heading.
-        while (!onHeading(speed, angle, P_TURN_COEFF)) {
-        }
-    }
-
-    /**
-     *  Method to obtain & hold a heading for a finite amount of time
-     *  Move will stop once the requested time has elapsed
-     *
-     * @param speed      Desired speed of turn.
-     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                   If a relative angle is required, add/subtract from current heading.
-     * @param holdTime   Length of time (in seconds) to hold the specified heading.
-     */
-    public void gyroHold( double speed, double angle, double holdTime) {
-
-        ElapsedTime holdTimer = new ElapsedTime();
-
-        // keep looping while we have time remaining.
-        holdTimer.reset();
-        while ((holdTimer.time() < holdTime)) {
-            // Update telemetry & Allow time for other processes to run.
-            onHeading(speed, angle, P_TURN_COEFF);
-        }
-
-        // Stop all motion;
-        fl.setPower(0);
-        fr.setPower(0);
-        bl.setPower(0);
-        br.setPower(0);
-    }
-
-    /**
-     * Perform one cycle of closed loop heading control.
-     *
-     * @param speed     Desired speed of turn.
-     * @param angle     Absolute Angle (in Degrees) relative to last gyro reset.
-     *                  0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                  If a relative angle is required, add/subtract from current heading.
-     * @param PCoeff    Proportional Gain coefficient
-     * @return
-     */
-    boolean onHeading(double speed, double angle, double PCoeff) {
-        double   error ;
-        double   steer ;
-        boolean  onTarget = false ;
-        double leftSpeed;
-        double rightSpeed;
-
-        // determine turn power based on +/- error
-        error = getError(angle);
-
-        if (Math.abs(error) <= HEADING_THRESHOLD) {
-            steer = 0.0;
-            leftSpeed  = 0.0;
-            rightSpeed = 0.0;
-            onTarget = true;
-        }
-        else {
-            steer = getSteer(error, PCoeff);
-            rightSpeed  = speed * steer;
-            leftSpeed   = -rightSpeed;
-        }
-
-        // Send desired speeds to motors.
-        fl.setPower(leftSpeed);
-        bl.setPower(leftSpeed);
-        fr.setPower(rightSpeed);
-        br.setPower(rightSpeed);
-
-        return onTarget;
-    }
-
-    /**
-     * getError determines the error between the target angle and the robot's current heading
-     * @param   targetAngle  Desired angle (relative to global reference established at last Gyro Reset).
-     * @return  error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
-     *          +ve error means the robot should turn LEFT (CCW) to reduce error.
-     */
-    public double getError(double targetAngle) {
-
-        double robotError;
-
-        // calculate error in -179 to +180 range  (
-        robotError = targetAngle - imu.getZAngle();
-        while (robotError > 180)  robotError -= 360;
-        while (robotError <= -180) robotError += 360;
-        return robotError;
-    }
-
-    /**
-     * returns desired steering force.  +/- 1 range.  +ve = steer left
-     * @param error   Error angle in robot relative degrees
-     * @param PCoeff  Proportional Gain Coefficient
-     * @return
-     */
-    public double getSteer(double error, double PCoeff) {
-        return Range.clip(error * PCoeff, -1, 1);
-    }
 }

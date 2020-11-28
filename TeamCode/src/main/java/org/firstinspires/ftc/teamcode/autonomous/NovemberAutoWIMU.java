@@ -192,7 +192,7 @@ public class NovemberAutoWIMU extends LinearOpMode {
          drive.stop();
      }*/
     public void driveToOne(){
-        drive.gyroTurn(.5,180);
+        //Implement: Turn 180 degrees at .5 power
         while(getD(front)>36){
             drive.forwardWithPower(0.5);
         }

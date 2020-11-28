@@ -1,39 +1,40 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.utils.CONFIG;
+import org.firstinspires.ftc.teamcode.utils.ButtonToggler;
 import org.firstinspires.ftc.teamcode.utils.IMU;
 import org.firstinspires.ftc.teamcode.utils.Intake;
-import org.firstinspires.ftc.teamcode.utils.MecDrive;
+import org.firstinspires.ftc.teamcode.utils.MecDrive2;
 import org.firstinspires.ftc.teamcode.utils.Outtake;
+import org.firstinspires.ftc.teamcode.utils.Pusher;
 import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 
-@TeleOp(name="Single Gamepad Field Centric")
-public class FieldCentricSingleGP extends OpMode {
-    MecDrive drive;
+public class DecemberTele extends OpMode {
+    MecDrive2 drive;
     Intake intake;
-    IMU imu;
     WobbleGoal wg;
     Outtake out;
-    Servo servo;
+    IMU imu;
+    Pusher pusher;
+    ButtonToggler btA;
     @Override
-    public void init() {
-        drive = new MecDrive(hardwareMap,false);
+    public void init(){
+        drive= new MecDrive2(hardwareMap);
         intake = new Intake(hardwareMap);
-        wg = new WobbleGoal(hardwareMap);
-        out = new Outtake(hardwareMap);
+        out  =new Outtake(hardwareMap);
         imu = new IMU(hardwareMap);
-        imu.initializeIMU();
-        servo = hardwareMap.get(Servo.class, CONFIG.PUSH);
+        wg=new WobbleGoal(hardwareMap);
+        pusher = new Pusher(hardwareMap);
+        btA = new ButtonToggler();
     }
 
     @Override
-    public void loop() {
-        drive.driveFieldCentric(gamepad1,imu);
-        if(gamepad1.a){
+    public void loop(){
+        btA.ifRelease(gamepad1.y);
+        btA.update(gamepad1.y);
+        drive.teleOp(gamepad1);
+        if(btA.getMode()){
             intake.spin();
         }
         else{
@@ -50,6 +51,7 @@ public class FieldCentricSingleGP extends OpMode {
             wg.stopElevator();
         }
 
+
         if(gamepad1.dpad_up){
             wg.grab();
         }
@@ -65,10 +67,10 @@ public class FieldCentricSingleGP extends OpMode {
             out.stop();
         }
         if(gamepad1.dpad_left){
-            servo.setPosition(0.6);
+            pusher.pull();
         }
         else if(gamepad1.dpad_right){
-            servo.setPosition(0.8);
+            pusher.push();
         }
         telemetry.addData("leftx",gamepad1.left_stick_x);
         telemetry.addData("leftY",gamepad1.left_stick_y);
@@ -77,5 +79,5 @@ public class FieldCentricSingleGP extends OpMode {
         telemetry.addData("imu",imu.getZAngle());
         telemetry.update();
     }
-}
 
+}

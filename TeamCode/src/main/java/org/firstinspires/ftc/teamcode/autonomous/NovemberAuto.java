@@ -45,7 +45,6 @@ public class NovemberAuto extends LinearOpMode {
         wg.lift();
         sleep(200);
         wg.stopElevator();
-        drive.setIMU(imu);
 
         /*telemetry.addLine("Starting camera init");
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -202,14 +201,14 @@ public class NovemberAuto extends LinearOpMode {
         drive.stop();
     }
     public void driveToOne(){
-        drive.gyroTurn(.5,180);
+        //Implement: Turn 180 degrees at .5 power
         while(getD(front)>36){
             drive.forwardWithPower(0.5);
         }
         drive.stop();
     }
     public void driveToFour(){
-        drive.gyroTurn(.5,180);
+        //Implement: Turn 180 degrees at .5 power
         /*while(getD(right)>18){
             if(getD(right)>30){
                 drive.strafeRightWithPower(.8);

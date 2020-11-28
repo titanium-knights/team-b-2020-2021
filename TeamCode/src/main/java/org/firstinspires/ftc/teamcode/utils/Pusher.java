@@ -9,10 +9,10 @@ public class Pusher {
          push = hm.get(Servo.class,CONFIG.PUSH);
      }
      public void push(){
-         push.setPosition(0.4);
+         push.setPosition(0.6);
      }
      public void pull(){
-         push.setPosition(1);
+         push.setPosition(0.8);
      }
 
 }
