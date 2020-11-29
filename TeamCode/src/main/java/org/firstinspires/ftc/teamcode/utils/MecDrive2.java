@@ -145,6 +145,7 @@ public class MecDrive2 {
     public void teleOpRobotCentric(Gamepad g1){
         setPower(g1.left_stick_x,-g1.left_stick_y,g1.right_stick_x);
     }
+
     public void teleOpFieldCentric(Gamepad g1, IMU imu){
         double angle = Math.toRadians(imu.getZAngle());
         double inputY = -g1.left_stick_y;
@@ -233,5 +234,22 @@ public class MecDrive2 {
      */
     public void backwardWithPower(double power){
         setPower(new Pose2D(0,-power,0));
+    }
+
+    public void gyroTurn(double angle, IMU imu){
+        double target = angle+imu.getZAngle();
+        double error = target - imu.getZAngle();
+        double Kp = 0.04;
+        double leftPow;
+        double rightPow;
+
+        while((Math.abs(error)>2) && !Thread.currentThread().interrupted())
+        {
+            error = imu.getZAngle() - target;
+            leftPow = error * Kp;
+            rightPow = -error * Kp;
+            setRawPowers(leftPow, rightPow,leftPow, rightPow);
+        }
+        stop();
     }
 }
