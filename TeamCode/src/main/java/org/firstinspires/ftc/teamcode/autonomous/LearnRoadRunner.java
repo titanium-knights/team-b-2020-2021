@@ -6,12 +6,14 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.utils.MecDrive;
+import org.firstinspires.ftc.teamcode.utils.Outtake;
 import org.firstinspires.ftc.teamcode.utils.RRQuickStart.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 
 public class LearnRoadRunner extends LinearOpMode {
     SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
     WobbleGoal wg = new WobbleGoal(hardwareMap);
+    Outtake o = new Outtake(hardwareMap);
     Trajectory driveToPointA;
     Trajectory driveToShootingPt;
     Trajectory driveToStart2;
@@ -30,19 +32,34 @@ public class LearnRoadRunner extends LinearOpMode {
 
         drive.followTrajectory(driveToPointA);
         //TODO Release WG
+        wg.release();
 
         drive.followTrajectory(driveToShootingPt);
         //TODO Shoot 3 rings
-
+        o.spin();
+        for (int i = 0 ; i < 3; i++) {
+            o.push();
+        }
+        o.stop();
 
         drive.followTrajectory(driveToStart2);
         //TODO lower wg-elevator and pick up wobble goal
+        wg.lower();
+        wg.grab();
+        wg.lift();
 
         //TODO Create a trajectory and follow it to Point A
+        Pose2d a = new Pose2d(-48,-24, Math.toRadians(0));
+        start2ToPointA = drive.trajectoryBuilder(driveToPointA.end()).splineTo(new Vector2d(12,-60), Math.toRadians(0)).build();
+
 
         //TODO drop wg
+        wg.lower();
+        wg.release();
+        wg.stop();
 
         //TODO Park On Line
+        
 
     }
     public void initialize(){
@@ -56,13 +73,9 @@ public class LearnRoadRunner extends LinearOpMode {
                 .build();
 
         //0,-36
-        driveToShootingPt = drive.trajectoryBuilder(driveToPointA.end())
-                .splineTo(new Vector2d(0,-36), Math.toRadians(0))
-                .build();
+        driveToShootingPt = drive.trajectoryBuilder(driveToPointA.end()).splineTo(new Vector2d(0,-36), Math.toRadians(0)).build();
         //(-48,-24)
-        driveToStart2 = drive.trajectoryBuilder(driveToShootingPt.end())
-                .splineTo(new Vector2d(-48,-24),Math.toRadians(180))
-                .build();
+        driveToStart2 = drive.trajectoryBuilder(driveToShootingPt.end()).splineTo(new Vector2d(-48,-24),Math.toRadians(180)).build();
 
 
         waitForStart();
