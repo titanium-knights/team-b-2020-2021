@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.utils.ButtonToggler;
 import org.firstinspires.ftc.teamcode.utils.IMU;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.utils.Outtake;
 import org.firstinspires.ftc.teamcode.utils.Pusher;
 import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 
+@TeleOp(name = "DecemberTele")
 public class DecemberTele extends OpMode {
     MecDrive2 drive;
     Intake intake;
@@ -24,6 +26,8 @@ public class DecemberTele extends OpMode {
         intake = new Intake(hardwareMap);
         out  =new Outtake(hardwareMap);
         imu = new IMU(hardwareMap);
+        imu.initializeIMU();
+
         wg=new WobbleGoal(hardwareMap);
         pusher = new Pusher(hardwareMap);
         btA = new ButtonToggler();
@@ -33,7 +37,7 @@ public class DecemberTele extends OpMode {
     public void loop(){
         btA.ifRelease(gamepad1.y);
         btA.update(gamepad1.y);
-        drive.teleOp(gamepad1);
+        drive.teleOpFieldCentric(gamepad1,imu);
         if(btA.getMode()){
             intake.spin();
         }
@@ -58,7 +62,9 @@ public class DecemberTele extends OpMode {
         else if(gamepad1.dpad_down){
             wg.release();
         }
-
+        else{
+            wg.stop();
+        }
 
         if(gamepad1.y){
             out.spin();
@@ -74,7 +80,7 @@ public class DecemberTele extends OpMode {
         }
         telemetry.addData("leftx",gamepad1.left_stick_x);
         telemetry.addData("leftY",gamepad1.left_stick_y);
-        telemetry.addData("rightx",gamepad1.right_stick_y);
+        telemetry.addData("rightx",gamepad1.right_stick_x);
         telemetry.addData("righty",gamepad1.right_stick_y);
         telemetry.addData("imu",imu.getZAngle());
         telemetry.update();

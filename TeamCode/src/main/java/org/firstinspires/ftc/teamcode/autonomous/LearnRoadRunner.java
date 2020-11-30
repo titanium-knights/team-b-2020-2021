@@ -19,29 +19,34 @@ public class LearnRoadRunner extends LinearOpMode {
     Trajectory pointAToLine;
     @Override
     public void runOpMode() throws InterruptedException {
-        drive.followTrajectory(driveToPointA);
-        wg.release();
-        drive.followTrajectory(driveToShootingPt);
-        //Shoot 3 rings
-
-
-        drive.followTrajectory(driveToStart2);
-        //pick up wobble goal
-        wg.lower();
-        sleep(500);
-        wg.stop();
+        initialize();
+        //Grab and pick up wg
         wg.grab();
+        sleep(500);
         wg.lift();
         sleep(500);
         wg.stop();
 
+
+        drive.followTrajectory(driveToPointA);
+        //TODO Release WG
+
+        drive.followTrajectory(driveToShootingPt);
+        //TODO Shoot 3 rings
+
+
+        drive.followTrajectory(driveToStart2);
+        //TODO lower wg-elevator and pick up wobble goal
+
+        //TODO Create a trajectory and follow it to Point A
+
+        //TODO drop wg
+
+        //TODO Park On Line
+
     }
     public void initialize(){
 
-        /*Pose2d startPosition = new Pose2d(-72,-48,Math.toRadians(0));
-        Trajectory driveToPointA = drive.trajectoryBuilder(startPosition)
-                .splineTo(new Vector2d(12,-60),Math.toRadians(0))
-                .build();*/
         //-60,-48
         Pose2d startPosition = new Pose2d(-60, -48, Math.toRadians(0));
 

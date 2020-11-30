@@ -236,14 +236,14 @@ public class MecDrive2 {
         setPower(new Pose2D(0,-power,0));
     }
 
-    public void gyroTurn(double angle, IMU imu){
+    public void gyroTurn(double angle, double marginOfError, IMU imu){
         double target = angle+imu.getZAngle();
         double error = target - imu.getZAngle();
         double Kp = 0.04;
         double leftPow;
         double rightPow;
 
-        while((Math.abs(error)>2) && !Thread.currentThread().interrupted())
+        while((Math.abs(error)>marginOfError) && !Thread.currentThread().interrupted())
         {
             error = imu.getZAngle() - target;
             leftPow = error * Kp;

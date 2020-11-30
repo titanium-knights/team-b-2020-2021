@@ -72,7 +72,7 @@ public class RoboCentricSingleGP extends OpMode {
         }
         telemetry.addData("leftx",gamepad1.left_stick_x);
         telemetry.addData("leftY",gamepad1.left_stick_y);
-        telemetry.addData("rightx",gamepad1.right_stick_y);
+        telemetry.addData("rightx",gamepad1.right_stick_x);
         telemetry.addData("righty",gamepad1.right_stick_y);
         telemetry.addData("imu",imu.getZAngle());
         telemetry.update();

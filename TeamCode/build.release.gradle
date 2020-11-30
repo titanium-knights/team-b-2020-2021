@@ -7,8 +7,10 @@ dependencies {
     implementation (name: 'tensorflow-lite-0.0.0-nightly', ext:'aar')
     implementation 'org.openftc:easyopencv:1.4.1'
     implementation 'com.acmerobotics.dashboard:dashboard:0.3.10'
-    implementation 'com.arcrobotics:ftclib:1.1.0'
+
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'com.acmerobotics.roadrunner:core:0.5.2'
     implementation 'com.acmerobotics.dashboard:dashboard:0.3.10'
+    implementation 'com.arcrobotics.ftclib:vision:1.1.0'
+    implementation 'com.arcrobotics:ftclib:1.1.6'
 }
