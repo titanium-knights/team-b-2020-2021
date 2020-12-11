@@ -19,8 +19,8 @@ public class December11Test extends OpMode {
 
     @Override
     public void loop() {
-        btA.ifRelease(gamepad1.y);
-        btA.update(gamepad1.y);
+        btA.ifRelease(gamepad1.a);
+        btA.update(gamepad1.a);
         btY.ifRelease(gamepad1.y);
         btY.update(gamepad1.y);
         if (btA.getMode()) {
