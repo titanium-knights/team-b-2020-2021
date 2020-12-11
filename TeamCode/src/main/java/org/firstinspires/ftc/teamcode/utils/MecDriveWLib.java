@@ -32,17 +32,17 @@ public class MecDriveWLib {
         //pos.start();
 
         this.fl = new Motor(hardwareMap,flName);
-        this.fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //this.fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         this.fr =new Motor(hardwareMap,frName);
-        this.fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.fr.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //this.fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //this.fr.motor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.bl = new Motor(hardwareMap, blName);
-        this.bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //this.bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         this.br = new Motor(hardwareMap, brName);
-        this.br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //this.br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.br.motor.setDirection(DcMotorSimple.Direction.REVERSE);
         if(usingEncoder){
             this.fl.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
