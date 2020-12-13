@@ -15,6 +15,11 @@ public class Intake {
     public void spin() {
         intakeMotor.setPower(1);
     }
+    public void spinBoth() {
+        spin();
+        spinBottom();
+
+    }
     public void spinBottom(){
         bottomRoller.setPower(1);
     }

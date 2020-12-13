@@ -20,6 +20,8 @@ public class DecemberTele extends OpMode {
     IMU imu;
     Pusher pusher;
     ButtonToggler btA;
+    ButtonToggler btY;
+    ButtonToggler btB;
     @Override
     public void init(){
         drive= new MecDrive2(hardwareMap);
@@ -30,16 +32,29 @@ public class DecemberTele extends OpMode {
 
         wg=new WobbleGoal(hardwareMap);
         pusher = new Pusher(hardwareMap);
-        btA = new ButtonToggler();
+        btY = new ButtonToggler();
     }
 
     @Override
     public void loop(){
-        btA.ifRelease(gamepad1.y);
-        btA.update(gamepad1.y);
-        drive.teleOpFieldCentric(gamepad1,imu);
+        btA.ifRelease(gamepad1.a);
+        btA.update(gamepad1.a);
+
+        btB.ifRelease(gamepad1.b);
+        btB.update(gamepad1.b);
+
+        btY.ifRelease(gamepad1.y);
+        btY.update(gamepad1.y);
+
+        if(!btY.getMode()){
+            drive.teleOpRobotCentric(gamepad1,1);
+        }
+        else{
+            drive.teleOpRobotCentric(gamepad1,0.5);
+        }
+
         if(btA.getMode()){
-            intake.spin();
+            intake.spinBoth();
         }
         else{
             intake.stop();
@@ -66,10 +81,10 @@ public class DecemberTele extends OpMode {
             wg.stop();
         }
 
-        if(gamepad1.y){
+        if(btY.getMode()){
             out.spin();
         }
-        if(gamepad1.b){
+        else{
             out.stop();
         }
         if(gamepad1.dpad_left){
@@ -78,10 +93,10 @@ public class DecemberTele extends OpMode {
         else if(gamepad1.dpad_right){
             pusher.push();
         }
-        telemetry.addData("leftx",gamepad1.left_stick_x);
-        telemetry.addData("leftY",gamepad1.left_stick_y);
-        telemetry.addData("rightx",gamepad1.right_stick_x);
-        telemetry.addData("righty",gamepad1.right_stick_y);
+        telemetry.addData("leftX",gamepad1.left_stick_x);
+        telemetry.addData("leftY",-gamepad1.left_stick_y);
+        telemetry.addData("rightX",gamepad1.right_stick_x);
+        telemetry.addData("rightY",gamepad1.right_stick_y);
         telemetry.addData("imu",imu.getZAngle());
         telemetry.update();
     }

@@ -57,20 +57,27 @@ public class MecDrive2 {
      * @param y power in the vertical or y direction
      * @param rot rotational power
      */
-    public void setPower(double x, double y, double rot){
+    public void setPower(double x, double y, double rot, double speedModifier){
         double[] power={
-                y-x-rot,//fl
-                y+x+rot,//fr
-                y+x-rot,//bl
-                y-x+rot//br
+                y+x+rot,//fl
+                y-x-rot,//fr
+                y-x+rot,//bl
+                y+x-rot//br
         };
+        for(int i=0;i<4;i++){
+            power[i]*=speedModifier;
+        }
         double max = Math.max(Math.abs(Arrays.stream(power).max().getAsDouble()),Math.abs(Arrays.stream(power).min().getAsDouble()));
         if(max>1){
             for(int i=0;i<4;i++){
                 power[i]/=max;
             }
         }
+
         setRawPowers(power);
+    }
+    public void setPower(double x, double y, double rot){
+        setPower(x,y,rot,1);
     }
 
     /**
@@ -82,10 +89,10 @@ public class MecDrive2 {
      */
     public double[] getPowerArr(double x, double y, double rot){//1 0 0
         double[] power={
-                y-x-rot,//fl //-1
-                y+x+rot,//fr //1
-                y+x-rot,//bl //1
-                y-x+rot//br//-1
+                y+x+rot,//fl
+                y-x-rot,//fr
+                y-x+rot,//bl
+                y+x-rot//br
         };
         double max = Math.max(Math.abs(Arrays.stream(power).max().getAsDouble()),Math.abs(Arrays.stream(power).min().getAsDouble()));
         if(max>1){
@@ -144,6 +151,9 @@ public class MecDrive2 {
      */
     public void teleOpRobotCentric(Gamepad g1){
         setPower(g1.left_stick_x,-g1.left_stick_y,g1.right_stick_x);
+    }
+    public void teleOpRobotCentric(Gamepad g1, double speedModifier){
+        setPower(g1.left_stick_x,-g1.left_stick_y,g1.right_stick_x, speedModifier);
     }
 
     public void teleOpFieldCentric(Gamepad g1, IMU imu){
