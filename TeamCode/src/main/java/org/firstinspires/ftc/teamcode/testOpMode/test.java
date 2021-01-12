@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testOpMode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -21,6 +22,7 @@ public class test extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         myLocalizer = new StandardTrackingWheelLocalizer(hardwareMap);
+        myLocalizer.setPoseEstimate(new Pose2d(-60, -18, Math.toRadians(90)));
         try {
             psm = new PoseStorageManager();
         } catch (IOException e) {
@@ -34,6 +36,7 @@ public class test extends LinearOpMode {
                 e.printStackTrace();
             }
         }
+        myLocalizer.update();
     }
 
 
