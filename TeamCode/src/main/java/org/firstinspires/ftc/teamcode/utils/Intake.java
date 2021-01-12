@@ -13,7 +13,7 @@ public class Intake {
     }
 
     public void spin() {
-        intakeMotor.setPower(1);
+        intakeMotor.setPower(-1);
     }
     public void spinBoth() {
         spin();

@@ -33,6 +33,8 @@ public class DecemberTele extends OpMode {
         wg=new WobbleGoal(hardwareMap);
         pusher = new Pusher(hardwareMap);
         btY = new ButtonToggler();
+        btA = new ButtonToggler();
+        btB = new ButtonToggler();
     }
 
     @Override
@@ -46,12 +48,13 @@ public class DecemberTele extends OpMode {
         btY.ifRelease(gamepad1.y);
         btY.update(gamepad1.y);
 
-        if(!btY.getMode()){
+        /*if(!btB.getMode()){
             drive.teleOpRobotCentric(gamepad1,1);
         }
         else{
             drive.teleOpRobotCentric(gamepad1,0.5);
-        }
+        }*/
+        drive.teleOpRobotCentric(gamepad1,telemetry);
 
         if(btA.getMode()){
             intake.spinBoth();
@@ -88,17 +91,20 @@ public class DecemberTele extends OpMode {
             out.stop();
         }
         if(gamepad1.dpad_left){
-            pusher.pull();
+            telemetry.addData("Dpad left pressed",true);
+            telemetry.update();
+            out.pull();
         }
         else if(gamepad1.dpad_right){
-            pusher.push();
+            telemetry.addData("Dpad right pressed",true);
+            telemetry.update();
+            out.push();
         }
         telemetry.addData("leftX",gamepad1.left_stick_x);
         telemetry.addData("leftY",-gamepad1.left_stick_y);
         telemetry.addData("rightX",gamepad1.right_stick_x);
         telemetry.addData("rightY",gamepad1.right_stick_y);
-        telemetry.addData("imu",imu.getZAngle());
+        //telemetry.addData("imu",imu.getZAngle());
         telemetry.update();
     }
-
 }

@@ -29,16 +29,16 @@ public class Outtake {
     }
 
     public void spin() {
-        shooter.setPower(1);
+        shooter.setPower(-1);
     }
     public void stop(){
         shooter.setPower(0);
     }
     public void push(){
-        pusher.setPosition(0.5);
+        pusher.setPosition(0.4);
     }
     public void pull(){
-        pusher.setPosition(1);
+        pusher.setPosition(.8);
     }
 
 }
