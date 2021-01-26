@@ -20,6 +20,12 @@ public class Intake {
         spinBottom();
 
     }
+    public void spinBothReverse() {
+        intakeMotor.setPower(1);
+        bottomRoller.setPower(-1);
+
+    }
+
     public void spinBottom(){
         bottomRoller.setPower(1);
     }

@@ -87,12 +87,12 @@ public class Contours extends OpenCvPipeline {
              * to determine whether stack is ONE or FOUR
              */
             if (aspectRatio > BOUND_RATIO)
-                stack = RingAmount.Rings.ZERO ;// height variable is now FOUR
+                stack = RingAmount.Rings.FOUR ;// height variable is now FOUR
             else
                 stack= RingAmount.Rings.ONE ;// height variable is now ONE
         }
         else{
-            stack= RingAmount.Rings.FOUR;
+            stack= RingAmount.Rings.ZERO;
         }
         telemetry.addData("stack",stack);
         telemetry.update();

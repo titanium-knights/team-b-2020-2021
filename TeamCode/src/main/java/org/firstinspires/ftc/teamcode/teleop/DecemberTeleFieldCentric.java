@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.utils.ButtonToggler;
 import org.firstinspires.ftc.teamcode.utils.IMU;
@@ -11,18 +12,21 @@ import org.firstinspires.ftc.teamcode.utils.Outtake;
 import org.firstinspires.ftc.teamcode.utils.Pusher;
 import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 
-@TeleOp(name = "DecemberTele")
-public class DecemberTele extends OpMode {
+import java.util.concurrent.TimeUnit;
+
+@TeleOp(name = "DecemberTeleField")
+public class DecemberTeleFieldCentric extends OpMode {
     MecDrive2 drive;
     Intake intake;
     WobbleGoal wg;
     Outtake out;
-
     IMU imu;
     Pusher pusher;
     ButtonToggler btA;
     ButtonToggler btY;
     ButtonToggler btB;
+    ElapsedTime time = new ElapsedTime();
+    boolean flickerInAction = false;
     @Override
     public void init(){
         drive= new MecDrive2(hardwareMap);
@@ -40,7 +44,6 @@ public class DecemberTele extends OpMode {
 
     @Override
     public void loop(){
-
         btA.ifRelease(gamepad1.a);
         btA.update(gamepad1.a);
 
@@ -56,10 +59,13 @@ public class DecemberTele extends OpMode {
         else{
             drive.teleOpRobotCentric(gamepad1,0.5);
         }*/
-        drive.teleOpRobotCentric(gamepad1,telemetry);
+        drive.teleOpFieldCentric(gamepad1,imu);
 
         if(btA.getMode()){
             intake.spinBoth();
+        }
+        else if (gamepad1.x){
+            intake.spinBothReverse();
         }
         else{
             intake.stop();
@@ -107,6 +113,17 @@ public class DecemberTele extends OpMode {
         telemetry.addData("rightX",gamepad1.right_stick_x);
         telemetry.addData("rightY",gamepad1.right_stick_y);
         //telemetry.addData("imu",imu.getZAngle());
+
+        if(gamepad1.dpad_up ){
+            out.push();
+            time.reset();
+            time.startTime();
+            flickerInAction = true;
+        }
+        if(flickerInAction&&time.time(TimeUnit.MILLISECONDS)>80){
+            out.pull();
+            flickerInAction=false;
+        }
         telemetry.update();
     }
 }

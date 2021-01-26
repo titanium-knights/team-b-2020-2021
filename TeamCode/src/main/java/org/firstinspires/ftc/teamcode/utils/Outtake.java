@@ -35,10 +35,10 @@ public class Outtake {
         shooter.setPower(0);
     }
     public void push(){
-        pusher.setPosition(0.4);
+        pusher.setPosition(0.25);
     }
     public void pull(){
-        pusher.setPosition(.8);
+        pusher.setPosition(.7);
     }
 
 }
