@@ -43,5 +43,37 @@ public class MDrive {
         br.setPower(powerArr[3]);
     }
 
+    /*
+    driveForwardWithPower
+    driveBackwardWithPower
+    strafeLeftWithPower
+    strafeRightWithPower
 
+    turnLeftWithPower
+    turnRightWithPower
+    stop
+
+     */
+    public void driveForwardsWithPower(double power){
+        driveXYRot(0,power,0);
+    }
+    public void driveBackwardsWithPower(double power){
+        driveXYRot(0,power,0);
+
+    }
+    public void strafeLeftWithPower(double power){
+        driveXYRot(-power,0,0);
+    }
+    public void strafeRightWithPower(double power){
+        driveXYRot(power,0,0);
+    }
+    public void turnLeftWithPower(double power){
+        driveXYRot(0,0,-power);
+    }
+    public void turnRightWithPower(double power){
+        driveXYRot(0,0, power);
+    }
+    public void stop(){
+        driveXYRot(0,0,0);
+    }
 }

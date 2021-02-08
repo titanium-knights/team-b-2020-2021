@@ -25,11 +25,11 @@ public class WobbleGoal {
     }
 
     public void lift() {
-        elevator.setPower(-0.3);
+        elevator.setPower(-1);
     }
 
     public void lower() {
-        elevator.setPower(0.3);
+        elevator.setPower(1);
     }
 
     public void stopElevator() {

@@ -2,8 +2,11 @@ package org.firstinspires.ftc.teamcode.utils;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Arrays;
 
@@ -17,13 +20,15 @@ public class MecDrive2 {
      */
     public MecDrive2(HardwareMap hmap){
         motors[0] = hmap.get(DcMotorEx.class,CONFIG.FRONTLEFT);
+        motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
         motors[1] = hmap.get(DcMotorEx.class,CONFIG.FRONTRIGHT);
         motors[2] = hmap.get(DcMotorEx.class,CONFIG.BACKLEFT);
+        motors[2].setDirection(DcMotorSimple.Direction.REVERSE);
         motors[3] = hmap.get(DcMotorEx.class,CONFIG.BACKRIGHT);
         for(DcMotorEx motor: motors){
             motor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-            motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+            //motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            //motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         }
     }
 
@@ -151,6 +156,11 @@ public class MecDrive2 {
      */
     public void teleOpRobotCentric(Gamepad g1){
         setPower(g1.left_stick_x,-g1.left_stick_y,g1.right_stick_x);
+    }
+    public void teleOpRobotCentric(Gamepad g1, Telemetry telemetry){
+        setPower(g1.left_stick_x,-g1.left_stick_y,g1.right_stick_x);
+        telemetry.addData("Called setPower","");
+        telemetry.update();
     }
     public void teleOpRobotCentric(Gamepad g1, double speedModifier){
         setPower(g1.left_stick_x,-g1.left_stick_y,g1.right_stick_x, speedModifier);

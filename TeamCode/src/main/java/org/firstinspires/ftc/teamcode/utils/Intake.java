@@ -13,13 +13,19 @@ public class Intake {
     }
 
     public void spin() {
-        intakeMotor.setPower(1);
+        intakeMotor.setPower(-1);
     }
     public void spinBoth() {
         spin();
         spinBottom();
 
     }
+    public void spinBothReverse() {
+        intakeMotor.setPower(1);
+        bottomRoller.setPower(-1);
+
+    }
+
     public void spinBottom(){
         bottomRoller.setPower(1);
     }
