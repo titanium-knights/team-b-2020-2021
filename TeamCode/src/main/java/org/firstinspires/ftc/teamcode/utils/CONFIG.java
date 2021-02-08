@@ -16,6 +16,7 @@ public class CONFIG {
     public static String SHOOTER = "shooter";
     public static String PUSH = "push";
     public static String INTAKE = "intake";
+    public static String BOTTOMROLLER = "bottomroller";
     public static String LEFTVERTICAL = "odoleft";
     public static String RIGHTVERTICAL = "odoright";
     public static String HORIZONTAL = "odohor";

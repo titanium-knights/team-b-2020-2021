@@ -5,23 +5,28 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.utils.Intake;
 import org.firstinspires.ftc.teamcode.utils.MecDrive;
 import org.firstinspires.ftc.teamcode.utils.Outtake;
 import org.firstinspires.ftc.teamcode.utils.RRQuickStart.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 
 public class LearnRoadRunner extends LinearOpMode {
-    SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-    WobbleGoal wg = new WobbleGoal(hardwareMap);
-    Outtake o = new Outtake(hardwareMap);
+    SampleMecanumDrive drive;
+    WobbleGoal wg;
+    Outtake o;
     Trajectory driveToPointA;
     Trajectory driveToShootingPt;
     Trajectory driveToStart2;
     Trajectory start2ToPointA;
+    Intake intake;
     Trajectory pointAToLine;
     @Override
     public void runOpMode() throws InterruptedException {
         initialize();
+
+        waitForStart();
+
         //Grab and pick up wg
         wg.grab();
         sleep(500);
@@ -34,13 +39,20 @@ public class LearnRoadRunner extends LinearOpMode {
         //TODO Release WG
         wg.release();
 
+
         drive.followTrajectory(driveToShootingPt);
         //TODO Shoot 3 rings
         o.spin();
         for (int i = 0 ; i < 3; i++) {
             o.push();
+            sleep(250);
+            o.pull();
+            if(i!=2) {
+                sleep(250);
+            }
         }
         o.stop();
+
 
         drive.followTrajectory(driveToStart2);
         //TODO lower wg-elevator and pick up wobble goal
@@ -63,7 +75,10 @@ public class LearnRoadRunner extends LinearOpMode {
 
     }
     public void initialize(){
-
+        intake = new Intake(hardwareMap);
+        drive = new SampleMecanumDrive(hardwareMap);
+        wg = new WobbleGoal(hardwareMap);
+        o = new Outtake(hardwareMap);
         //-60,-48
         Pose2d startPosition = new Pose2d(-60, -48, Math.toRadians(0));
 
