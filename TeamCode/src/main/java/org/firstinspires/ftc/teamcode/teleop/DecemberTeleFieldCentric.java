@@ -63,10 +63,10 @@ public class DecemberTeleFieldCentric extends OpMode {
 
         if(btA.getMode()){
             intake.spinBoth();
-        }
+        }/*
         else if (gamepad1.x){
             intake.spinBothReverse();
-        }
+        }*/
         else{
             intake.stop();
         }
@@ -82,14 +82,11 @@ public class DecemberTeleFieldCentric extends OpMode {
         }
 
 
-        if(gamepad1.dpad_up){
+        if(gamepad1.x){
             wg.grab();
         }
-        else if(gamepad1.dpad_down){
+        else if(gamepad1.b){
             wg.release();
-        }
-        else{
-            wg.stop();
         }
 
         if(btY.getMode()){
@@ -115,14 +112,18 @@ public class DecemberTeleFieldCentric extends OpMode {
         //telemetry.addData("imu",imu.getZAngle());
 
         if(gamepad1.dpad_up ){
-            out.push();
-            time.reset();
-            time.startTime();
-            flickerInAction = true;
+            if(!(time.time(TimeUnit.MILLISECONDS)>80)) {
+                out.push();
+                time.reset();
+                time.startTime();
+                flickerInAction = true;
+            }
+
         }
         if(flickerInAction&&time.time(TimeUnit.MILLISECONDS)>80){
             out.pull();
             flickerInAction=false;
+            time.reset();
         }
         telemetry.update();
     }

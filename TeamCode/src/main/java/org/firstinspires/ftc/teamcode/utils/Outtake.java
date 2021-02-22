@@ -11,7 +11,7 @@ public class Outtake {
     Servo pusher;
     public Outtake(HardwareMap hmap) {
         shooter = hmap.get(DcMotorEx.class, CONFIG.SHOOTER);
-        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //RUE
         pusher = hmap.get(Servo.class, CONFIG.PUSH);
 
     }
@@ -21,15 +21,11 @@ public class Outtake {
     public void setPIDF(double p, double i, double d, double f){
         shooter.setVelocityPIDFCoefficients(p,i,d,f);
     }
-    public void setVelo(double v){
-        shooter.setVelocity(v);
-    }
-    public void setFlywheelSpeed(double x) {
-        shooter.setPower(x);
-    }
+
 
     public void spin() {
         shooter.setPower(-1);
+        shooter.setVelocity(5400); //Rotations Per Minute
     }
     public void stop(){
         shooter.setPower(0);
