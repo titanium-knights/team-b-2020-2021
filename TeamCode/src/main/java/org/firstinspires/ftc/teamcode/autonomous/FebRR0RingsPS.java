@@ -17,7 +17,7 @@ public class FebRR0RingsPS extends LinearOpMode {
     private Outtake out;
     private Pose2d startPose = new Pose2d(-60.0,-36.0,0.0);
     private Vector2d wgAVector = new Vector2d(0,-50);
-    private Vector2d shootingVectorA = new Vector2d(0,-36+7);
+    private Vector2d shootingVectorA = new Vector2d(0,-26);
     private Vector2d shootingVectorB = new Vector2d(0,-36+7);
     private Vector2d shootingVectorC = new Vector2d(0,-36+14);
     private Vector2d wg2Pos = new Vector2d(-50,-32);
