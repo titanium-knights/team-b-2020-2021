@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.utils.Outtake;
 @Config
 public class ShooterEncoderTest extends OpMode {
     Outtake out;
-    public static double speed;
+    public static double speed=0.0;
     @Override
     public void init() {
         out = new Outtake(hardwareMap);
@@ -18,6 +18,6 @@ public class ShooterEncoderTest extends OpMode {
 
     @Override
     public void loop() {
-        //out.setFlywheelSpeed(speed);
+        out.setVelocityRPM(speed);
     }
 }

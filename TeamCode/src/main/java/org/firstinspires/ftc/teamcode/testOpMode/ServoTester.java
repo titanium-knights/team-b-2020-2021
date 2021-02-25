@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode.testOpMode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.utils.CONFIG;
+@Config
 @TeleOp(name="servo test")
 public class ServoTester extends LinearOpMode {
+    public static double pos = 0;
     Servo servo;
-    double pos;
+    //double pos;
 
     public void initi() {
         servo = hardwareMap.get(Servo.class, CONFIG.PUSH);
@@ -21,17 +24,7 @@ public class ServoTester extends LinearOpMode {
         initi();
         waitForStart();
         while(opModeIsActive() && !isStopRequested()) {
-            if (gamepad1.dpad_up) {
-                pos += .1;
-                servo.setPosition(pos);
-
-                sleep(150);
-            } else if (gamepad1.dpad_down) {
-                pos -= .1;
-                servo.setPosition(pos);
-
-                sleep(150);
-            }
+            servo.setPosition(pos);
             telemetry.addData("Position", pos);
             telemetry.update();
         }
