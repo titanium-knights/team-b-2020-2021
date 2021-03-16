@@ -20,7 +20,7 @@ public class FebRR0RingsPS extends LinearOpMode {
     private Vector2d shootingVectorA = new Vector2d(0,-26);
     private Vector2d shootingVectorB = new Vector2d(0,-36+7);
     private Vector2d shootingVectorC = new Vector2d(0,-36+14);
-    private Vector2d wg2Pos = new Vector2d(-50,-32);
+    private Vector2d wg2Pos = new Vector2d(-50,-30);
     private Vector2d finish = new Vector2d(12,-24);
     private SampleMecanumDrive drive;
     private Trajectory startToWGA;
@@ -94,7 +94,7 @@ public class FebRR0RingsPS extends LinearOpMode {
                 .strafeRight(5)
                 .build();
         wgAToShootingC = drive.trajectoryBuilder(wgAToShootingB.end())
-                .strafeRight(7.5)
+                .strafeRight(6.5)
                 .build();
         shootingCToShootingA = drive.trajectoryBuilder(wgAToShootingC.end())
                 .splineTo(shootingVectorA,Math.toRadians(180))
