@@ -17,7 +17,8 @@ public class WobbleGoal {
     }
 
     public void grab() {
-        grabber.setPosition(0.21);
+        //grabber.setPosition(0.21);
+        grabber.setPosition(0.19);
     }
 
     public void release() {
@@ -50,3 +51,4 @@ public class WobbleGoal {
         grabber.setPosition(pos);
     }
 }
+

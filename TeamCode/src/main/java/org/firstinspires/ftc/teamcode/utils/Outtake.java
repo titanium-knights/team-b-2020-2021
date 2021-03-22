@@ -12,7 +12,7 @@ public class Outtake {
     final double TICKS_PER_ROTATION = 28;
     public Outtake(HardwareMap hmap) {
         shooter = hmap.get(DcMotorEx.class, CONFIG.SHOOTER);
-        shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //RUE
+        //shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //RUE
         pusher = hmap.get(Servo.class, CONFIG.PUSH);
 
     }
@@ -45,6 +45,9 @@ public class Outtake {
     }
     public void pull(){
         pusher.setPosition(.85);
+    }
+    public void spinWPower(double pow){
+        shooter.setPower(pow);
     }
 
 }

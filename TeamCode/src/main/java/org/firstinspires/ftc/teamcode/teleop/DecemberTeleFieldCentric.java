@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,8 +15,10 @@ import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 
 import java.util.concurrent.TimeUnit;
 
+@Config
 @TeleOp(name = "DecemberTeleField")
 public class DecemberTeleFieldCentric extends OpMode {
+    public static double POWER = -1.0;
     MecDrive2 drive;
     Intake intake;
     WobbleGoal wg;
@@ -25,6 +28,7 @@ public class DecemberTeleFieldCentric extends OpMode {
     ButtonToggler btA;
     ButtonToggler btY;
     ButtonToggler btB;
+    ButtonToggler btX;
     ElapsedTime time = new ElapsedTime();
     boolean flickerInAction = false;
     @Override
@@ -40,12 +44,16 @@ public class DecemberTeleFieldCentric extends OpMode {
         btY = new ButtonToggler();
         btA = new ButtonToggler();
         btB = new ButtonToggler();
+        btX=new ButtonToggler();
     }
 
     @Override
     public void loop(){
         btA.ifRelease(gamepad1.a);
         btA.update(gamepad1.a);
+
+        btX.ifRelease(gamepad1.x);
+        btX.update(gamepad1.x);
 
         btB.ifRelease(gamepad1.b);
         btB.update(gamepad1.b);
@@ -60,6 +68,13 @@ public class DecemberTeleFieldCentric extends OpMode {
             drive.teleOpRobotCentric(gamepad1,0.5);
         }*/
         drive.teleOpFieldCentric(gamepad1,imu);
+
+        if(btB.getMode()){
+            POWER=-0.7;
+        }
+        else{
+            POWER=-1.0;
+        }
 
         if(btA.getMode()){
             intake.spinBoth();
@@ -82,15 +97,15 @@ public class DecemberTeleFieldCentric extends OpMode {
         }
 
 
-        if(gamepad1.x){
+        if(btX.getMode()){
             wg.grab();
         }
-        else if(gamepad1.b){
+        else {
             wg.release();
         }
 
         if(btY.getMode()){
-            out.spin();
+            out.spinWPower(POWER);
         }
         else{
             out.stop();
