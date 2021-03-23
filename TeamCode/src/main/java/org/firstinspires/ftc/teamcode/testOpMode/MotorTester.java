@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testOpMode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.utils.ButtonToggler;
 
+@Disabled
 @TeleOp(name = "19.2 full speed", group="test")
 public class MotorTester extends LinearOpMode {
     DcMotor motor;

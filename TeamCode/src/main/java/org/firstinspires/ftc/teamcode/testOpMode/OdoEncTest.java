@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.testOpMode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.utils.CONFIG;
+
+@Disabled
 @TeleOp(name="OdoEncTest")
 public class OdoEncTest extends LinearOpMode {
     DcMotorEx l;

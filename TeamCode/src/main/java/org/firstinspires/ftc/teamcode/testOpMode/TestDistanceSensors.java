@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testOpMode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.utils.CONFIG;
 
+@Disabled
 @TeleOp(name="Test Front&Left Distance", group = "Test")
 public class TestDistanceSensors extends LinearOpMode {
     DistanceSensor front;
