@@ -14,13 +14,12 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 
 public class Shooter2{
     // Copy your PIDF Coefficients here
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(85, 0, 10.5, 15.5);
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(85, 0, 2.1, 19.5);
     DcMotorEx shooter;
 
     Servo pusher;
     public Shooter2(HardwareMap hm){
         shooter = hm.get(DcMotorEx.class, CONFIG.SHOOTER);
-        shooter.setDirection(DcMotorSimple.Direction.REVERSE);
         for (LynxModule module : hm.getAll(LynxModule.class)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
@@ -42,7 +41,7 @@ public class Shooter2{
     public void spin() {
         shooter.setPower(1);
     }
-    public void spinPowershot(){shooter.setPower(0.7);}
+    public void spinPowershot(){shooter.setPower(0.6);}
     public void spinHighGoal(){spin();}
     public void stop(){
         shooter.setPower(0);

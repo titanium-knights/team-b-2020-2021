@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 /**
  * Created by Alice
  */
+
 public class OneRingAutonomous extends LinearOpMode {
     //Declare Trajectories
 

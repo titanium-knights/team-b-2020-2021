@@ -29,8 +29,8 @@ public class March1Ring extends LinearOpMode {
     private Pose2d startPose = new Pose2d(-60.0,-36.0,0.0);
     private Vector2d wgDumpZone = new Vector2d(24,-30);
     private Vector2d powerShotLeft = new Vector2d(0,-26);
-    private Vector2d intakePre = new Vector2d(-12,-38);
-    private Vector2d intakePost = new Vector2d(-24,-38);
+    private Vector2d intakePre = new Vector2d(-12,-44);
+    private Vector2d intakePost = new Vector2d(-24,-44);
     private Vector2d wg2Pos = new Vector2d(-50,-30);
     private Vector2d line = new Vector2d(12,-30);
 
@@ -57,7 +57,7 @@ public class March1Ring extends LinearOpMode {
         sleep(500);
         wg.stop();
         waitForStart();
-        out.spinWPower(-0.8);
+        out.spinWPower(0.8);
         Trajectory[] arr = {psLeftToPsMid,psMidToPsRight, psRightToIntakePre};
         drive.followTrajectory(startToPSLeft);
         sleep(500);
@@ -73,7 +73,7 @@ public class March1Ring extends LinearOpMode {
         intake.spinBoth();
         drive.followTrajectory(intakePreToIntakePost);
         drive.followTrajectory(intakePostToOneRingShoot);
-        out.spinWPower(-1);
+        out.spinWPower(1);
         sleep(2500);
         intake.stop();
 
@@ -141,7 +141,7 @@ public class March1Ring extends LinearOpMode {
                 .build();
 
         intakePostToOneRingShoot = drive.trajectoryBuilder(intakePreToIntakePost.end())
-                .strafeLeft(15)
+                .strafeLeft(9)
                 .build();
 
         intakePostToWGDump1 = drive.trajectoryBuilder(intakePostToOneRingShoot.end())

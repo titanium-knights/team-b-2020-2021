@@ -4,12 +4,13 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.utils.Outtake;
 import org.firstinspires.ftc.teamcode.utils.RRQuickStart.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
-
+@Disabled
 @Autonomous(name="JanuaryRR4Rings")
 public class JanuaryRR4Rings extends LinearOpMode {
     private WobbleGoal wg;

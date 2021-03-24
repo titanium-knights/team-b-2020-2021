@@ -70,10 +70,10 @@ public class DecemberTeleFieldCentric extends OpMode {
         drive.teleOpFieldCentric(gamepad1,imu);
 
         if(btB.getMode()){
-            POWER=-0.7;
+            POWER=0.7;
         }
         else{
-            POWER=-1.0;
+            POWER=1.0;
         }
 
         if(btA.getMode()){

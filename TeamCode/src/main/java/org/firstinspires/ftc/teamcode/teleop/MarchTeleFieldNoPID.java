@@ -17,13 +17,15 @@ import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 import java.util.concurrent.TimeUnit;
 
 @Config
-@TeleOp(name = "MarchTeleField")
-public class MarchTeleField extends OpMode {
+@TeleOp(name = "MarchTeleField2")
+public class MarchTeleFieldNoPID extends OpMode {
+    public static double POWER = 1.0;
+
     boolean hgOrPower= true; //True for high goal false for power shot
     MecDrive2 drive;
     Intake intake;
     WobbleGoal wg;
-    Shooter2 out;
+    Outtake out;
     IMU imu;
     Pusher pusher;
     ButtonToggler btA;
@@ -39,7 +41,7 @@ public class MarchTeleField extends OpMode {
     public void init(){
         drive= new MecDrive2(hardwareMap);
         intake = new Intake(hardwareMap);
-        out  =new Shooter2(hardwareMap);
+        out  =new Outtake(hardwareMap);
         imu = new IMU(hardwareMap);
         imu.initializeIMU();
 
@@ -75,10 +77,10 @@ public class MarchTeleField extends OpMode {
         drive.teleOpFieldCentric(gamepad1,imu);
 
         if(btB.getMode()){
-            hgOrPower = false;
+            POWER=0.7;
         }
         else{
-            hgOrPower = true;
+            POWER=1.0;
         }
 
         if(btA.getMode()){
@@ -107,12 +109,7 @@ public class MarchTeleField extends OpMode {
         }
 
         if(btY.getMode()){
-            if(hgOrPower){
-                out.spinHighGoal();
-            }
-            else{
-                out.spinPowershot();
-            }
+            out.spinWPower(POWER);
         }
         else{
             out.stop();
@@ -138,7 +135,7 @@ public class MarchTeleField extends OpMode {
             time.reset();
             out.pull();
         }
-        if(flickerInAction && time.time()>0.5){
+        if(flickerInAction && time.time()>0.9){
             out.push();
             flickerInAction=false;
         }
