@@ -28,7 +28,7 @@ public class March1Ring extends LinearOpMode {
 
     private Pose2d startPose = new Pose2d(-60.0,-36.0,0.0);
     private Vector2d wgDumpZone = new Vector2d(24,-30);
-    private Vector2d powerShotLeft = new Vector2d(0,-26);
+    private Vector2d powerShotLeft = new Vector2d(0,-22);
     private Vector2d intakePre = new Vector2d(-12,-44);
     private Vector2d intakePost = new Vector2d(-24,-44);
     private Vector2d wg2Pos = new Vector2d(-50,-30);

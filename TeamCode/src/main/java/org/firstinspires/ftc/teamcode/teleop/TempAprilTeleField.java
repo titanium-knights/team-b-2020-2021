@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.testOpMode.TempShooter;
 import org.firstinspires.ftc.teamcode.utils.ButtonToggler;
 import org.firstinspires.ftc.teamcode.utils.IMU;
 import org.firstinspires.ftc.teamcode.utils.Intake;
@@ -17,14 +20,14 @@ import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 import java.util.concurrent.TimeUnit;
 
 @Config
-@TeleOp(name = "MarchTeleField")
-public class MarchTeleField extends OpMode {
-    public static double power=1.0;
+@TeleOp
+public class TempAprilTeleField extends OpMode {
+    public static double power=0.58;
     boolean hgOrPower= true; //True for high goal false for power shot
     MecDrive2 drive;
     Intake intake;
-    WobbleGoal wg;
-    Shooter2 out;
+    //WobbleGoal wg;
+    TempShooter out;
     IMU imu;
     Pusher pusher;
     ButtonToggler btA;
@@ -36,21 +39,24 @@ public class MarchTeleField extends OpMode {
     ElapsedTime time = new ElapsedTime();
     ElapsedTime finishFlickerTime = new ElapsedTime();
     boolean flickerInAction = false;
+    FtcDashboard dashboard;
     @Override
     public void init(){
         drive= new MecDrive2(hardwareMap);
         intake = new Intake(hardwareMap);
-        out  =new Shooter2(hardwareMap);
+        out  =new TempShooter(hardwareMap);
         imu = new IMU(hardwareMap);
         imu.initializeIMU();
 
-        wg=new WobbleGoal(hardwareMap);
+        //wg=new WobbleGoal(hardwareMap);
         pusher = new Pusher(hardwareMap);
         btY = new ButtonToggler();
         btA = new ButtonToggler();
         btB = new ButtonToggler();
         btX=new ButtonToggler();
         finishFlickerTime.startTime();
+        dashboard= FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
     }
 
     @Override
@@ -67,12 +73,7 @@ public class MarchTeleField extends OpMode {
         btY.ifRelease(gamepad1.y);
         btY.update(gamepad1.y);
 
-        /*if(!btB.getMode()){
-            drive.teleOpRobotCentric(gamepad1,1);
-        }
-        else{
-            drive.teleOpRobotCentric(gamepad1,0.5);
-        }*/
+
         drive.teleOpFieldCentric(gamepad1,imu);
 
         if(btB.getMode()){
@@ -89,7 +90,7 @@ public class MarchTeleField extends OpMode {
         else{
             intake.stop();
         }
-
+    /*
         if(gamepad1.left_trigger>0.2){
             wg.setElevatorPower(gamepad1.left_trigger);
         }
@@ -107,17 +108,17 @@ public class MarchTeleField extends OpMode {
         else {
             wg.release();
         }
-
+*/
         if(btY.getMode()){
             if(hgOrPower){
-                out.spinHighGoal();
+                //out.spinHighGoal();
                 telemetry.addData("Mode","High Goal");
-                //out.spinWPower(power);
+                out.spinWPower(power);
             }
             else{
-                out.spinPowershot();
+                //out.spinPowershot();
                 telemetry.addData("Mode","Powershot");
-                //out.spinWPower(power);
+                out.spinWPower(power);
             }
         }
         else{
@@ -125,18 +126,18 @@ public class MarchTeleField extends OpMode {
         }
         if(gamepad1.dpad_left){
             telemetry.addData("Dpad left pressed",true);
-            telemetry.update();
             out.pull();
         }
         else if(gamepad1.dpad_right){
             telemetry.addData("Dpad right pressed",true);
-            telemetry.update();
             out.push();
         }
         telemetry.addData("leftX",gamepad1.left_stick_x);
         telemetry.addData("leftY",-gamepad1.left_stick_y);
         telemetry.addData("rightX",gamepad1.right_stick_x);
         telemetry.addData("rightY",gamepad1.right_stick_y);
+        telemetry.addData("Velocity",out.getShooter().getVelocity());
+        telemetry.addData("VelocityRPM",tickPSecToRPM(out.getShooter().getVelocity()));
         telemetry.update();
         //telemetry.addData("imu",imu.getZAngle());
         if(previousRBState && !gamepad1.right_bumper){
@@ -150,5 +151,8 @@ public class MarchTeleField extends OpMode {
             flickerInAction=false;
         }
         previousRBState = gamepad1.right_bumper;
+    }
+    public double tickPSecToRPM(double tps){
+        return (tps*1*60)/(28.0);
     }
 }

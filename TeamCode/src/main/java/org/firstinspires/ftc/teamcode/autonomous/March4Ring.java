@@ -20,8 +20,8 @@ import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 import java.util.Arrays;
 import java.util.Vector;
 
-@Autonomous(name="March1RingPID")
-public class March1RingImproved extends LinearOpMode {
+@Autonomous(name="March4Ring")
+public class March4Ring extends LinearOpMode {
     private WobbleGoal wg;
     private Shooter2 out;
     private Intake intake;
@@ -41,13 +41,12 @@ public class March1RingImproved extends LinearOpMode {
     private Trajectory psMidToPsRight;
     private Trajectory psRightToIntakePre;
     private Trajectory intakePreToIntakePost;
-    private Trajectory intakePostToOneRingShoot;
+    private Trajectory intakePostToThreeRingsShoot;
     private Trajectory intakePostToWGDump1;
     private Trajectory wgDump1ToWG2;
     private Trajectory wg2ToWGDump2;
-    private Trajectory wgDump2ToPark;
-    private Trajectory avoidRings1;
-    private Trajectory avoidRings2;
+    private Trajectory intakePostToIntakePre;
+    private Trajectory intakePreToIntakePost2;
 
     @Override
     public void runOpMode(){
@@ -70,22 +69,31 @@ public class March1RingImproved extends LinearOpMode {
         }
         out.stop();
 
-        //Picks up 1 ring
+        //Picks up 3 rings
         intake.spinBoth();
         drive.followTrajectory(intakePreToIntakePost);
-        drive.followTrajectory(intakePostToOneRingShoot);
+        sleep(2000);
         out.spinHighGoal();
-        sleep(2500);
+        drive.followTrajectory(intakePostToIntakePre);
+        sleep(250);
         intake.stop();
 
-        //Shoots 1 ring that was intaked
+
+        //Shoots 3 ring that was intaked
 
         out.pull();
         sleep(750);
         out.stop();
         out.push();
 
-
+        intake.spinBoth();
+        drive.followTrajectory(intakePreToIntakePost2);
+        out.spinHighGoal();
+        sleep(1000);
+        out.pull();
+        sleep(250);
+        out.stop();
+        out.push();
         //GoesTo dump and dumps
         drive.followTrajectory(intakePostToWGDump1);
         wg.release();
@@ -121,10 +129,6 @@ public class March1RingImproved extends LinearOpMode {
     }
     public void createTrajectories(){
         drive.setPoseEstimate(startPose);
-        avoidRings1 = drive.trajectoryBuilder(startPose)
-                .splineToLinearHeading(new Pose2d( -28,-15,Math.toRadians(-90)),0)
-                .build()
-        ;
         startToPSLeft = drive.trajectoryBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(powerShotLeft.getX(),powerShotLeft.getY(),Math.toRadians(180)),-7.0)
                 .build();
@@ -141,11 +145,13 @@ public class March1RingImproved extends LinearOpMode {
                 .splineToConstantHeading(intakePost,0)
                 .build();
 
-        intakePostToOneRingShoot = drive.trajectoryBuilder(intakePreToIntakePost.end())
-                .strafeLeft(9)
+        intakePostToIntakePre = drive.trajectoryBuilder(intakePreToIntakePost.end())
+                .splineToConstantHeading(intakePre,0)
                 .build();
-
-        intakePostToWGDump1 = drive.trajectoryBuilder(intakePostToOneRingShoot.end())
+        intakePreToIntakePost2 = drive.trajectoryBuilder(intakePostToIntakePre.end())
+                .splineToConstantHeading(intakePost,0)
+                .build();
+        intakePostToWGDump1 = drive.trajectoryBuilder(intakePreToIntakePost2.end())
                 .splineTo(
                         wgDumpZone,Math.toRadians(45),
                         new MinVelocityConstraint(
@@ -164,10 +170,6 @@ public class March1RingImproved extends LinearOpMode {
         wg2ToWGDump2 = drive.trajectoryBuilder(wgDump1ToWG2.end())
                 .splineTo(wgDumpZone,Math.toRadians(45))
                 .build();
-        wgDump2ToPark = drive.trajectoryBuilder(wg2ToWGDump2.end())
-                .splineToConstantHeading(line,0)
-                .build();
-
 
     }
 }

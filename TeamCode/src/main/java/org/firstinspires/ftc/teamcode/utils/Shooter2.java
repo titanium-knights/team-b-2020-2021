@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.utils;
 
+
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,6 +13,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.utils.CONFIG;
+import org.firstinspires.ftc.teamcode.utils.FlwheelPID.TuningController;
+import org.firstinspires.ftc.teamcode.utils.FlwheelPID.VelocityPIDFController;
 
 public class Shooter2{
     // Copy your PIDF Coefficients here
@@ -41,8 +48,8 @@ public class Shooter2{
     public void spin() {
         shooter.setPower(1);
     }
-    public void spinPowershot(){shooter.setPower(0.6);}
-    public void spinHighGoal(){spin();}
+    public void spinPowershot(){shooter.setPower(0.42);}
+    public void spinHighGoal(){shooter.setPower(0.46);}
     public void stop(){
         shooter.setPower(0);
     }

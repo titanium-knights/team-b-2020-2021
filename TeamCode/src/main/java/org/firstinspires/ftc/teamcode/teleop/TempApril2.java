@@ -1,37 +1,58 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.control.PIDFController;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.testOpMode.TempShooter;
 import org.firstinspires.ftc.teamcode.utils.ButtonToggler;
 import org.firstinspires.ftc.teamcode.utils.IMU;
 import org.firstinspires.ftc.teamcode.utils.Intake;
 import org.firstinspires.ftc.teamcode.utils.MecDrive2;
 import org.firstinspires.ftc.teamcode.utils.Outtake;
 import org.firstinspires.ftc.teamcode.utils.Pusher;
+import org.firstinspires.ftc.teamcode.utils.RRQuickStart.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.Shooter2;
+import org.firstinspires.ftc.teamcode.utils.Shooter3;
 import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 
 import java.util.concurrent.TimeUnit;
 
 @Config
-@TeleOp(name = "MarchTeleField")
-public class MarchTeleField extends OpMode {
-    public static double power=1.0;
+@TeleOp
+public class TempApril2 extends OpMode {
+    enum Mode{
+        DRIVER_CONTROL,
+        AUTOMATED_MOVEMENT,
+        IN_PROGESS
+    }
+    Mode currentMode = Mode.DRIVER_CONTROL;
+    Pose2d startingPose = new Pose2d(-60,-36,0);//REPLACE WITH POSESTORAGE LATER
+    Vector2d shootingPosition = new Vector2d(-24,-53);
+    PIDFController hController = new PIDFController(SampleMecanumDrive.HEADING_PID);
+    Pose2d shootingPose= new Pose2d(-24,-53,Math.toRadians(180));
+    SampleMecanumDrive rrDrive;
+    public static double power=0.58;
     boolean hgOrPower= true; //True for high goal false for power shot
     MecDrive2 drive;
     Intake intake;
-    WobbleGoal wg;
-    Shooter2 out;
+    //WobbleGoal wg;
+    Shooter3 out;
     IMU imu;
-    Pusher pusher;
     ButtonToggler btA;
     ButtonToggler btY;
     ButtonToggler btB;
     ButtonToggler btX;
+    ButtonToggler btLB;
     boolean previousRBState = false;
+    boolean previousLBState = false;
+
+
     long set1, set2, set3;
     ElapsedTime time = new ElapsedTime();
     ElapsedTime finishFlickerTime = new ElapsedTime();
@@ -40,16 +61,18 @@ public class MarchTeleField extends OpMode {
     public void init(){
         drive= new MecDrive2(hardwareMap);
         intake = new Intake(hardwareMap);
-        out  =new Shooter2(hardwareMap);
+        out  =new Shooter3(hardwareMap);
         imu = new IMU(hardwareMap);
         imu.initializeIMU();
-
-        wg=new WobbleGoal(hardwareMap);
-        pusher = new Pusher(hardwareMap);
+        rrDrive = new SampleMecanumDrive(hardwareMap);
+        //rrDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rrDrive.getLocalizer().setPoseEstimate(startingPose);
+        //wg=new WobbleGoal(hardwareMap);
         btY = new ButtonToggler();
         btA = new ButtonToggler();
         btB = new ButtonToggler();
         btX=new ButtonToggler();
+        btLB=new ButtonToggler();
         finishFlickerTime.startTime();
     }
 
@@ -67,13 +90,52 @@ public class MarchTeleField extends OpMode {
         btY.ifRelease(gamepad1.y);
         btY.update(gamepad1.y);
 
+        btLB.ifRelease(gamepad1.left_bumper);
+        btLB.update(gamepad1.left_bumper);
         /*if(!btB.getMode()){
             drive.teleOpRobotCentric(gamepad1,1);
         }
         else{
             drive.teleOpRobotCentric(gamepad1,0.5);
         }*/
-        drive.teleOpFieldCentric(gamepad1,imu);
+        Pose2d currentPose = rrDrive.getLocalizer().getPoseEstimate();
+        switch (currentMode){
+            case DRIVER_CONTROL:
+                Vector2d input = new Vector2d(
+                        -gamepad1.left_stick_y,
+                        -gamepad1.left_stick_x
+                ).rotated(-currentPose.getHeading());
+
+                rrDrive.setWeightedDrivePower(
+                        new Pose2d(
+                                input.getX(),
+                                input.getY(),
+                                -gamepad1.right_stick_x
+                        )
+                );
+                break;
+            case AUTOMATED_MOVEMENT:
+                Trajectory t = rrDrive.trajectoryBuilder(currentPose)
+                        .lineToSplineHeading(shootingPose)
+                        .build();
+                    rrDrive.followTrajectoryAsync(t);
+                    currentMode = Mode.IN_PROGESS;
+                case IN_PROGESS:
+                break;
+        }
+        if(btLB.getMode()){
+            if (currentMode == Mode.DRIVER_CONTROL)   {
+                currentMode = Mode.AUTOMATED_MOVEMENT;
+            }
+        }
+        else{
+            currentMode=Mode.DRIVER_CONTROL;
+        }
+
+        rrDrive.update();
+        telemetry.addData("Current Mode",currentMode);
+        telemetry.addData("current pose",currentPose);
+        telemetry.addData("prev state",btLB.getMode());
 
         if(btB.getMode()){
             hgOrPower = false;
@@ -89,40 +151,22 @@ public class MarchTeleField extends OpMode {
         else{
             intake.stop();
         }
-
-        if(gamepad1.left_trigger>0.2){
-            wg.setElevatorPower(gamepad1.left_trigger);
-        }
-        else if(gamepad1.right_trigger>0.2){
-            wg.setElevatorPower(-gamepad1.right_trigger);
-        }
-        else{
-            wg.stopElevator();
-        }
-
-
-        if(btX.getMode()){
-            wg.grab();
-        }
-        else {
-            wg.release();
-        }
-
         if(btY.getMode()){
             if(hgOrPower){
-                out.spinHighGoal();
+                //out.spinHighGoal();
                 telemetry.addData("Mode","High Goal");
-                //out.spinWPower(power);
+                out.spinWPower(power);
             }
             else{
-                out.spinPowershot();
+                //out.spinPowershot();
                 telemetry.addData("Mode","Powershot");
-                //out.spinWPower(power);
+                out.spinWPower(power);
             }
         }
         else{
             out.stop();
         }
+        out.update();
         if(gamepad1.dpad_left){
             telemetry.addData("Dpad left pressed",true);
             telemetry.update();
@@ -138,7 +182,7 @@ public class MarchTeleField extends OpMode {
         telemetry.addData("rightX",gamepad1.right_stick_x);
         telemetry.addData("rightY",gamepad1.right_stick_y);
         telemetry.update();
-        //telemetry.addData("imu",imu.getZAngle());
+        telemetry.addData("imu",imu.getZAngle());
         if(previousRBState && !gamepad1.right_bumper){
             //RB was just released. Start flick
             flickerInAction = true;
@@ -150,5 +194,6 @@ public class MarchTeleField extends OpMode {
             flickerInAction=false;
         }
         previousRBState = gamepad1.right_bumper;
+
     }
 }
