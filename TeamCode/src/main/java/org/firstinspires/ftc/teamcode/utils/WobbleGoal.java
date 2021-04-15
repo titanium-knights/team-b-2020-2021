@@ -7,21 +7,21 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class WobbleGoal {
     DcMotor elevator;
-    CRServo grabber;
+    Servo grabber;
 
     public WobbleGoal(HardwareMap hmap) {
         elevator = hmap.dcMotor.get("elevator");
-        grabber = hmap.get(CRServo.class,"grabber");
+        grabber = hmap.get(Servo.class,"grabber");
         elevator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void grab() {
-        grabber.setPower(-1);
+        grabber.setPosition(0.21);
     }
 
     public void release() {
-        grabber.setPower(1);
+        grabber.setPosition(0.63);
     }
 
     public void lift() {
@@ -37,11 +37,16 @@ public class WobbleGoal {
     }
 
     public void stopServo(){
-        grabber.setPower(0);
+        //grabber.setPower(0);
     }
     public void stop(){
         elevator.setPower(0);
-        grabber.setPower(0);
+        //grabber.setPower(0);
     }
-
+    public void setElevatorPower(double power){
+        elevator.setPower(power);
+    }
+    public void setServoPos(double pos){
+        grabber.setPosition(pos);
+    }
 }

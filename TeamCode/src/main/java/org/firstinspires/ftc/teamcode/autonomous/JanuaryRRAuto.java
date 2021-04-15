@@ -112,7 +112,7 @@ public class JanuaryRRAuto extends LinearOpMode {
         }
     }
     public void setPoseEstimate(){
-        PoseStorage.currentPose = drive.getPoseEstimate();
+        PoseStorage.pose = drive.getPoseEstimate();
     }
     @Override
     public void runOpMode() throws InterruptedException {

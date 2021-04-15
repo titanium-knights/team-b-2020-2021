@@ -6,20 +6,20 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.StateMachine;
-import org.firstinspires.ftc.teamcode.utils.PoseStorageManager;
 import org.firstinspires.ftc.teamcode.utils.RRQuickStart.drive.StandardTrackingWheelLocalizer;
 
 import java.io.IOException;
 
-public class test extends LinearOpMode {
+public class test {//extends LinearOpMode {
     DcMotor a;
-    PoseStorageManager psm;
+    //PoseStorageManager psm;
     StandardTrackingWheelLocalizer myLocalizer ;
     public test(HardwareMap hm){
         a = hm.get(DcMotor.class, "a");
     }
 
-    @Override
+    //@Override
+    /*
     public void runOpMode() throws InterruptedException {
         myLocalizer = new StandardTrackingWheelLocalizer(hardwareMap);
         myLocalizer.setPoseEstimate(new Pose2d(-60, -18, Math.toRadians(90)));
@@ -37,7 +37,7 @@ public class test extends LinearOpMode {
             }
         }
         myLocalizer.update();
-    }
+    }*/
 
 
 }

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils.RRQuickStart.drive;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.trajectory.constraints.DriveConstraints;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 /*
@@ -33,7 +32,8 @@ public class DriveConstants {
      * from DriveVelocityPIDTuner.
      */
     public static final boolean RUN_USING_ENCODER = false;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0, getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
+            getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -45,7 +45,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = (96.0/25.4)/2.0; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 15.5; // in
+    public static double TRACK_WIDTH = 16.9; // in also this is effective track width. measured is 15.5
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -53,8 +53,7 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    //public static double kV = 1.0 / rpmToVelocity(MAX_RPM);
-    public static double kV = 0.016;
+    public static double kV = 0.017;
     public static double kA = 0.002;
     public static double kStatic = 0.07;
 
@@ -62,14 +61,14 @@ public class DriveConstants {
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
      * the constraints should never exceed ~80% of the robot's actual capabilities. While Road
      * Runner is designed to enable faster autonomous motion, it is a good idea for testing to start
-     * small and gradually increase them later after everything is working. The velocity and
-     * acceleration values are required, and the jerk values are optional (setting a jerk of 0.0
-     * forces acceleration-limited profiling). All distance units are inches.
+     * small and gradually increase them later after everything is working. All distance units are
+     * inches.
      */
-    public static DriveConstraints BASE_CONSTRAINTS = new DriveConstraints(
-            30.0, 30.0, 0.0,
-            Math.toRadians(180.0), Math.toRadians(180.0), 0.0
-    );
+    public static double MAX_VEL = 30;
+    public static double MAX_ACCEL = 30;
+    //public static double MAX_ANG_VEL = Math.toRadians(60);
+    public static double MAX_ANG_VEL = 169.59788330901466;
+    public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
 
     public static double encoderTicksToInches(double ticks) {
@@ -84,8 +83,4 @@ public class DriveConstants {
         // see https://docs.google.com/document/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/edit#heading=h.61g9ixenznbx
         return 32767 / ticksPerSecond;
     }
-    //MidFL 2 MIDFR 13.5
-    //Lateral Distance 15.5
-    //Total distance of dt channel 17.4
-    //Back to horizontal noramal encoder 8.5
 }
