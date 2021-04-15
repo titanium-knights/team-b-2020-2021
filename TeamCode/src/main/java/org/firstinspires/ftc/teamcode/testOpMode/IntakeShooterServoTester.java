@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.testOpMode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.utils.Intake;
 import org.firstinspires.ftc.teamcode.utils.MecDrive;
 import org.firstinspires.ftc.teamcode.utils.Outtake;
 
+@Disabled
 @TeleOp(name="Intake and Shooter test",group = "test")
 public class IntakeShooterServoTester extends OpMode {
     Intake intake;

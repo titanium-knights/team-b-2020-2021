@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.testOpMode;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.utils.IMU;
 
 import java.util.Arrays;
 
+@Disabled
 public class DSLocalizationTest extends LinearOpMode {
     DistanceSensor front;
     DistanceSensor left;

@@ -40,7 +40,11 @@ public class Intake {
         bottomRoller.setPower(0);
     }
 
+    public void spinBothSpecial() {
+        intakeMotor.setPower(-0.7);
+        spinBottom();
 
+    }
     void setSpeed(double val) {
         intakeMotor.setPower(val);
     }

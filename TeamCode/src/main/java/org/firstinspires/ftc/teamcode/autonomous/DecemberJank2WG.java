@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.arcrobotics.ftclib.vision.UGContourRingPipeline;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
@@ -22,6 +23,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.Arrays;
 
+@Disabled
 @Autonomous(name = "December Auto")
 public class DecemberJank2WG extends LinearOpMode {
     //BEGIN CV STUFF

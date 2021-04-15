@@ -175,6 +175,15 @@ public class MecDrive2 {
         double y = Math.sin(angle) * inputX + Math.cos(angle) * inputY;
         setPower(x,y,rot);
     }
+    public void teleOpFieldCentric(Gamepad g1, double degrees){
+        double angle = Math.toRadians(degrees);
+        double inputY = -g1.left_stick_y;
+        double inputX = g1.left_stick_x;
+        double rot = g1.right_stick_x;
+        double x = Math.cos(angle) * inputX - Math.sin(angle) * inputY;
+        double y = Math.sin(angle) * inputX + Math.cos(angle) * inputY;
+        setPower(x,y,rot);
+    }
 
     public void teleOpFieldCentricDeg(Gamepad g1, double deg){
         double angle = Math.toRadians(deg);

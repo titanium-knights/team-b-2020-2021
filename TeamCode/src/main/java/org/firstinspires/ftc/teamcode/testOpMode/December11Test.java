@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.testOpMode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.utils.ButtonToggler;
 import org.firstinspires.ftc.teamcode.utils.Intake;
-
+@Disabled
 @TeleOp(name="December 11 Tester")
 public class December11Test extends OpMode {
     ButtonToggler btA = new ButtonToggler();

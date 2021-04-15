@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.utils.LaunchMath;
 import org.firstinspires.ftc.teamcode.utils.MecDriveWLib;
 import org.firstinspires.ftc.teamcode.utils.Outtake;
 import org.firstinspires.ftc.teamcode.utils.Pusher;
+@Disabled
 
 @TeleOp(name = "Field Centric Mecanum", group="TeleOp")
 public class FieldCentricMecanumDrive extends OpMode {

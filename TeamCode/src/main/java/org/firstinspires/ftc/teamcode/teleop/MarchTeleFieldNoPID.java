@@ -11,14 +11,17 @@ import org.firstinspires.ftc.teamcode.utils.Intake;
 import org.firstinspires.ftc.teamcode.utils.MecDrive2;
 import org.firstinspires.ftc.teamcode.utils.Outtake;
 import org.firstinspires.ftc.teamcode.utils.Pusher;
+import org.firstinspires.ftc.teamcode.utils.Shooter2;
 import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 
 import java.util.concurrent.TimeUnit;
 
 @Config
-@TeleOp(name = "DecemberTeleField")
-public class DecemberTeleFieldCentric extends OpMode {
-    public static double POWER = -1.0;
+@TeleOp(name = "MarchTeleField2")
+public class MarchTeleFieldNoPID extends OpMode {
+    public static double POWER = 1.0;
+
+    boolean hgOrPower= true; //True for high goal false for power shot
     MecDrive2 drive;
     Intake intake;
     WobbleGoal wg;
@@ -29,7 +32,10 @@ public class DecemberTeleFieldCentric extends OpMode {
     ButtonToggler btY;
     ButtonToggler btB;
     ButtonToggler btX;
+    boolean previousRBState = false;
+    long set1, set2, set3;
     ElapsedTime time = new ElapsedTime();
+    ElapsedTime finishFlickerTime = new ElapsedTime();
     boolean flickerInAction = false;
     @Override
     public void init(){
@@ -45,6 +51,7 @@ public class DecemberTeleFieldCentric extends OpMode {
         btA = new ButtonToggler();
         btB = new ButtonToggler();
         btX=new ButtonToggler();
+        finishFlickerTime.startTime();
     }
 
     @Override
@@ -78,19 +85,16 @@ public class DecemberTeleFieldCentric extends OpMode {
 
         if(btA.getMode()){
             intake.spinBoth();
-        }/*
-        else if (gamepad1.x){
-            intake.spinBothReverse();
-        }*/
+        }
         else{
             intake.stop();
         }
 
-        if(gamepad1.left_bumper){
-            wg.lift();
+        if(gamepad1.left_trigger>0.2){
+            wg.setElevatorPower(gamepad1.left_trigger);
         }
-        else if(gamepad1.right_bumper){
-            wg.lower();
+        else if(gamepad1.right_trigger>0.2){
+            wg.setElevatorPower(-gamepad1.right_trigger);
         }
         else{
             wg.stopElevator();
@@ -125,21 +129,16 @@ public class DecemberTeleFieldCentric extends OpMode {
         telemetry.addData("rightX",gamepad1.right_stick_x);
         telemetry.addData("rightY",gamepad1.right_stick_y);
         //telemetry.addData("imu",imu.getZAngle());
-
-        if(gamepad1.dpad_up ){
-            if(!(time.time(TimeUnit.MILLISECONDS)>80)) {
-                out.push();
-                time.reset();
-                time.startTime();
-                flickerInAction = true;
-            }
-
-        }
-        if(flickerInAction&&time.time(TimeUnit.MILLISECONDS)>80){
-            out.pull();
-            flickerInAction=false;
+        if(previousRBState && !gamepad1.right_bumper){
+            //RB was just released. Start flick
+            flickerInAction = true;
             time.reset();
+            out.pull();
         }
-        telemetry.update();
+        if(flickerInAction && time.time()>0.9){
+            out.push();
+            flickerInAction=false;
+        }
+        previousRBState = gamepad1.right_bumper;
     }
 }
