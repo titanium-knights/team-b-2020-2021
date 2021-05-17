@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.testOpMode.TempShooter;
 import org.firstinspires.ftc.teamcode.utils.ButtonToggler;
+import org.firstinspires.ftc.teamcode.utils.DualShooterNoPID;
 import org.firstinspires.ftc.teamcode.utils.IMU;
 import org.firstinspires.ftc.teamcode.utils.Intake;
 import org.firstinspires.ftc.teamcode.utils.MecDrive2;
@@ -42,7 +43,8 @@ public class TempApril2 extends OpMode {
     MecDrive2 drive;
     Intake intake;
     //WobbleGoal wg;
-    Shooter3 out;
+    DualShooterNoPID out;
+    WobbleGoal wg;
     IMU imu;
     ButtonToggler btA;
     ButtonToggler btY;
@@ -61,19 +63,20 @@ public class TempApril2 extends OpMode {
     public void init(){
         drive= new MecDrive2(hardwareMap);
         intake = new Intake(hardwareMap);
-        out  =new Shooter3(hardwareMap);
+        out  =new DualShooterNoPID(hardwareMap);
         imu = new IMU(hardwareMap);
         imu.initializeIMU();
         rrDrive = new SampleMecanumDrive(hardwareMap);
         //rrDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rrDrive.getLocalizer().setPoseEstimate(startingPose);
-        //wg=new WobbleGoal(hardwareMap);
+        wg=new WobbleGoal(hardwareMap);
         btY = new ButtonToggler();
         btA = new ButtonToggler();
         btB = new ButtonToggler();
         btX=new ButtonToggler();
         btLB=new ButtonToggler();
         finishFlickerTime.startTime();
+        wg.allBackArm();
     }
 
     @Override
@@ -153,20 +156,17 @@ public class TempApril2 extends OpMode {
         }
         if(btY.getMode()){
             if(hgOrPower){
-                //out.spinHighGoal();
+                out.spinHighGoal();
                 telemetry.addData("Mode","High Goal");
-                out.spinWPower(power);
             }
             else{
-                //out.spinPowershot();
+                out.spinPowershot();
                 telemetry.addData("Mode","Powershot");
-                out.spinWPower(power);
             }
         }
         else{
             out.stop();
         }
-        out.update();
         if(gamepad1.dpad_left){
             telemetry.addData("Dpad left pressed",true);
             telemetry.update();
@@ -177,6 +177,20 @@ public class TempApril2 extends OpMode {
             telemetry.update();
             out.push();
         }
+
+        if(gamepad1.left_trigger>0.2){
+            wg.lift();
+        }
+        else if(gamepad1.right_trigger>0.2){
+            wg.lower();
+        }
+        if(btX.getMode()){
+            wg.grab();
+        }
+        else {
+            wg.release();
+        }
+
         telemetry.addData("leftX",gamepad1.left_stick_x);
         telemetry.addData("leftY",-gamepad1.left_stick_y);
         telemetry.addData("rightX",gamepad1.right_stick_x);

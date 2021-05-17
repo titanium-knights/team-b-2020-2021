@@ -1,51 +1,55 @@
 package org.firstinspires.ftc.teamcode.utils;
 
-import com.qualcomm.robotcore.hardware.CRServo;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
+@Config
 public class WobbleGoal {
-    DcMotor elevator;
+    Servo arm;
     Servo grabber;
-
+    public static double armPositionLift = 0.65;
+    public static double armPositionLower = 0.92;
+    public static double grabPositionGrab =0.75;
+    public static double grabPositionRelease =0.35;
+    public static double initializationVal = 0.25;
     public WobbleGoal(HardwareMap hmap) {
-        elevator = hmap.dcMotor.get("elevator");
-        grabber = hmap.get(Servo.class,"grabber");
-        elevator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        elevator.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm = hmap.get(Servo.class,"wgarm");
+        grabber = hmap.get(Servo.class,"wggrabber");
     }
 
     public void grab() {
         //grabber.setPosition(0.21);
-        grabber.setPosition(0.19);
+        grabber.setPosition(grabPositionGrab);
     }
 
     public void release() {
-        grabber.setPosition(0.63);
+        grabber.setPosition(grabPositionRelease);
     }
 
     public void lift() {
-        elevator.setPower(-1);
+        arm.setPosition(armPositionLift);
     }
 
     public void lower() {
-        elevator.setPower(1);
+        arm.setPosition(armPositionLower);
     }
 
-    public void stopElevator() {
-        elevator.setPower(0);
+    public void allBackArm(){
+        arm.setPosition(initializationVal);
     }
-
     public void stopServo(){
         //grabber.setPower(0);
     }
-    public void stop(){
-        elevator.setPower(0);
-        //grabber.setPower(0);
-    }
+
     public void setElevatorPower(double power){
-        elevator.setPower(power);
+        //arm.setPower(power);
+    }
+    public void stopElevator(){
+        int a=0;
+    }
+    public void stop(){
+        stopElevator();
     }
     public void setServoPos(double pos){
         grabber.setPosition(pos);

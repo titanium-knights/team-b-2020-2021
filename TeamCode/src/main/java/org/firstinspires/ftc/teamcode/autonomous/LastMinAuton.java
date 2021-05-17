@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationCon
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.utils.DualShooterNoPID;
 import org.firstinspires.ftc.teamcode.utils.Intake;
 import org.firstinspires.ftc.teamcode.utils.Outtake;
 import org.firstinspires.ftc.teamcode.utils.RRQuickStart.drive.DriveConstants;
@@ -20,23 +21,21 @@ import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 import java.util.Arrays;
 import java.util.Vector;
 
-@Autonomous(name="March1RingPID")
-public class March1RingImproved extends LinearOpMode {
-    private double yMultiplier = 1.0;
-
-
+@Autonomous(name="LastMinAuton")
+public class LastMinAuton extends LinearOpMode {
     private WobbleGoal wg;
-    private Shooter2 out;
+    private DualShooterNoPID out;
     private Intake intake;
     private SampleMecanumDrive drive;
 
     private Pose2d startPose = new Pose2d(-60.0,-36.0,0.0);
-    private Vector2d wgDumpZone = new Vector2d(24,-30* yMultiplier);
-    private Vector2d powerShotLeft = new Vector2d(0,-22*yMultiplier);
-    private Vector2d intakePre = new Vector2d(-12,-44*yMultiplier);
-    private Vector2d intakePost = new Vector2d(-24,-44*yMultiplier);
-    private Vector2d wg2Pos = new Vector2d(-50,-30*yMultiplier);
-    private Vector2d line = new Vector2d(12,-30*yMultiplier);
+    private Vector2d wgDumpZone = new Vector2d(24,-42);
+    private Vector2d powerShotLeft = new Vector2d(0,-22+14);
+    private Vector2d intakePre = new Vector2d(-12,-44+5);
+    private Vector2d intakePost = new Vector2d(-24,-44+5);
+
+    private Vector2d wg2Pos = new Vector2d(-50,-30);
+    private Vector2d line = new Vector2d(12,-30);
 
 
     private Trajectory startToPSLeft;
@@ -95,7 +94,7 @@ public class March1RingImproved extends LinearOpMode {
         wg.lower();
         sleep(500);
         wg.stop();
-/*
+          /*
         //Goes to 2nd wg and picks up
         drive.followTrajectory(wgDump1ToWG2);
         wg.grab();
@@ -116,7 +115,7 @@ public class March1RingImproved extends LinearOpMode {
     public void initialize(){
         drive = new SampleMecanumDrive(hardwareMap);
         wg = new WobbleGoal(hardwareMap);
-        out=new Shooter2(hardwareMap);
+        out=new DualShooterNoPID(hardwareMap);
         intake = new Intake(hardwareMap);
         createTrajectories();
 
@@ -145,10 +144,10 @@ public class March1RingImproved extends LinearOpMode {
                 .build();
 
         intakePostToOneRingShoot = drive.trajectoryBuilder(intakePreToIntakePost.end())
-                .strafeLeft(9)
+                .back(12)
                 .build();
 
-        intakePostToWGDump1 = drive.trajectoryBuilder(intakePostToOneRingShoot.end())
+        /*intakePostToWGDump1 = drive.trajectoryBuilder(intakePostToOneRingShoot.end())
                 .splineTo(
                         wgDumpZone,Math.toRadians(45),
                         new MinVelocityConstraint(
@@ -160,6 +159,9 @@ public class March1RingImproved extends LinearOpMode {
                         new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL)
 
                 )
+                .build();*/
+        intakePostToWGDump1 = drive.trajectoryBuilder(intakePostToOneRingShoot.end())
+                .splineTo(wgDumpZone,Math.toRadians(45))
                 .build();
         wgDump1ToWG2 = drive.trajectoryBuilder(intakePostToWGDump1.end())
                 .splineTo(wg2Pos,Math.toRadians(0))

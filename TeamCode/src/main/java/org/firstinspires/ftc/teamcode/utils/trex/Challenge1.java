@@ -10,6 +10,7 @@ public class Challenge1 extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         drive = new MDrive(hardwareMap);
         waitForStart();
+
         //Put your code here
         //travel in a rectangle
     }
