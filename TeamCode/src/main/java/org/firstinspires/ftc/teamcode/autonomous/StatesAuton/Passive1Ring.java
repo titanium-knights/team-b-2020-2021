@@ -20,6 +20,7 @@ public class Passive1Ring extends LinearOpMode {
     public void runOpMode(){
         initialize();
         wg.grab();
+        //TODO change both sleeps to 250ms
         sleep(2000);
         wg.lift();
         sleep(500);
@@ -33,6 +34,7 @@ public class Passive1Ring extends LinearOpMode {
 
     }
     public void initialize(){
+        //TODO Initialize wobble goal object
         drive = new SampleMecanumDrive(hardwareMap);
         createTrajectories();
 
@@ -40,6 +42,7 @@ public class Passive1Ring extends LinearOpMode {
     }
     public void createTrajectories(){
         drive.setPoseEstimate(startPose);
+        //TODO bumps into the rings while dumping wobble goal which is not good as the other team will need to intake this
         startToWGB = drive.trajectoryBuilder(startPose)
                 .splineTo(wgBVector,Math.toRadians(90))
                 .build();

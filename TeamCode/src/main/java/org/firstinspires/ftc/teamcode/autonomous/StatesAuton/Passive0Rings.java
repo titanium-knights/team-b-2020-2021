@@ -21,6 +21,7 @@ public class Passive0Rings extends LinearOpMode {
     public void runOpMode(){
         initialize();
         wg.grab();
+        //TODO: We're using a servo to grab and lift so we only need 250 ms for both sleep
         sleep(2000);
         wg.lift();
         sleep(500);
@@ -34,6 +35,8 @@ public class Passive0Rings extends LinearOpMode {
 
     }
     public void initialize(){
+        //TODO initialize wobbleGoal object
+
         drive = new SampleMecanumDrive(hardwareMap);
         createTrajectories();
 
@@ -44,6 +47,7 @@ public class Passive0Rings extends LinearOpMode {
         startToWGA = drive.trajectoryBuilder(startPose)
                 .splineTo(wgAVector,Math.toRadians(45))
                 .build();
+        //TODO Currently it will drop the wobble goal and then push the wobble goal out of the box
         wgAToFinish = drive.trajectoryBuilder(startToWGA.end())
                 .splineTo(finish,Math.toRadians(0))
                 .build();

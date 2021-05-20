@@ -20,6 +20,8 @@ public class Passive4Rings extends LinearOpMode {
     public void runOpMode(){
         initialize();
         wg.grab();
+        //TODO change both sleeps to 250ms
+
         sleep(2000);
         wg.lift();
         sleep(500);
@@ -33,6 +35,8 @@ public class Passive4Rings extends LinearOpMode {
 
     }
     public void initialize(){
+        //TODO Initialize wobble goal object
+
         drive = new SampleMecanumDrive(hardwareMap);
         createTrajectories();
 
