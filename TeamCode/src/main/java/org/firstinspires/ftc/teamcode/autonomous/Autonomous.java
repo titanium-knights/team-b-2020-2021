@@ -33,12 +33,13 @@ Park on line
 public class Autonomous extends LinearOpMode {
 
     SampleMecanumDrive drive;
+
     Shooter2 shooter;
     Intake in;
     WobbleGoal wg;
     //###########################################################################################
     Pose2d startingPose= new Pose2d(-60.0,-36.0,Math.toRadians(180));
-    Trajectory t1,t2,t3,t4,t5,t6, t7,t8,t9,t10;
+    Trajectory t1,t2,t3,t4,t5,t6,t7,t8,t9,t10;
 
 
     //###########################################################################################
@@ -235,7 +236,7 @@ public class Autonomous extends LinearOpMode {
                 //Go To the Wobble Goal C dump zone
                 t7 = drive.trajectoryBuilder(t6.end(), true)
                         .splineToLinearHeading(wgPos4Ring,0.0)
-                        .build();;
+                        .build();
                 //Go To the second start position to get the wobble goal
                 t8 = drive.trajectoryBuilder(t7.end(), false)
                         .lineToLinearHeading(wgStartPose)
@@ -296,8 +297,5 @@ public class Autonomous extends LinearOpMode {
 
             //It should alrdy be on line at this pt
         }
-        
-
-
     }
 }
