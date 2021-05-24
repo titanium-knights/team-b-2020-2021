@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 public class Passive1Ring extends LinearOpMode {
     private WobbleGoal wg;
     private Pose2d startPose = new Pose2d(-60.0,-48.0,0.0);
-    private Vector2d wgBVector = new Vector2d(36,-48);
+    private Vector2d wgBVector = new Vector2d(36,-60);
     private Vector2d finish = new Vector2d(12,-60);
     private SampleMecanumDrive drive;
     private Trajectory startToWGB;
@@ -20,10 +20,9 @@ public class Passive1Ring extends LinearOpMode {
     public void runOpMode(){
         initialize();
         wg.grab();
-        //TODO change both sleeps to 250ms
-        sleep(2000);
+        sleep(250);
         wg.lift();
-        sleep(500);
+        sleep(250);
         wg.stop();
         waitForStart();
         drive.followTrajectory(startToWGB);
@@ -34,7 +33,7 @@ public class Passive1Ring extends LinearOpMode {
 
     }
     public void initialize(){
-        //TODO Initialize wobble goal object
+        wg = new WobbleGoal(hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
         createTrajectories();
 
@@ -42,12 +41,12 @@ public class Passive1Ring extends LinearOpMode {
     }
     public void createTrajectories(){
         drive.setPoseEstimate(startPose);
-        //TODO bumps into the rings while dumping wobble goal which is not good as the other team will need to intake this
+
         startToWGB = drive.trajectoryBuilder(startPose)
                 .splineTo(wgBVector,Math.toRadians(90))
                 .build();
         wgBToFinish = drive.trajectoryBuilder(startToWGB.end())
-                .splineTo(finish,Math.toRadians(0))
+                .splineTo(finish,Math.toRadians(180))
                 .build();
         /*startToWGA2 =drive.trajectoryBuilder(startToWGA1.end())
                 .strafeTo(wgAVector2)

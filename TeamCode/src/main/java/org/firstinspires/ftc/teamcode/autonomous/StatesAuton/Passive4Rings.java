@@ -20,11 +20,10 @@ public class Passive4Rings extends LinearOpMode {
     public void runOpMode(){
         initialize();
         wg.grab();
-        //TODO change both sleeps to 250ms
 
-        sleep(2000);
+        sleep(250);
         wg.lift();
-        sleep(500);
+        sleep(250);
         wg.stop();
         waitForStart();
         drive.followTrajectory(startToWGC);
@@ -35,7 +34,7 @@ public class Passive4Rings extends LinearOpMode {
 
     }
     public void initialize(){
-        //TODO Initialize wobble goal object
+        wg = new WobbleGoal(hardwareMap);
 
         drive = new SampleMecanumDrive(hardwareMap);
         createTrajectories();
@@ -45,7 +44,7 @@ public class Passive4Rings extends LinearOpMode {
     public void createTrajectories(){
         drive.setPoseEstimate(startPose);
         startToWGC = drive.trajectoryBuilder(startPose)
-                .splineTo(wgCVector,Math.toRadians(45))
+                .splineTo(wgCVector,Math.toRadians(0))
                 .build();
         wgCToFinish = drive.trajectoryBuilder(startToWGC.end())
                 .splineTo(finish,Math.toRadians(0))
