@@ -3,10 +3,6 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -21,18 +17,17 @@ import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 import java.util.Arrays;
 import java.util.Vector;
 
-@Autonomous(name="LastMinAuton")
-public class LastMinAuton extends LinearOpMode {
+public class MayRedAlliance extends LinearOpMode {
     private WobbleGoal wg;
     private DualShooterNoPID out;
     private Intake intake;
     private SampleMecanumDrive drive;
 
-    private Pose2d startPose = new Pose2d(-60.0,-36.0,0.0);
-    private Vector2d wgDumpZone = new Vector2d(24,-42);
-    private Vector2d powerShotLeft = new Vector2d(0,-22+14);
-    private Vector2d intakePre = new Vector2d(-12,-44+5);
-    private Vector2d intakePost = new Vector2d(-24,-44+5);
+    private Pose2d startPose = new Pose2d(-60.0,-48.0,0.0);
+    private Vector2d wgDumpZone = new Vector2d(12,-54);
+    private Vector2d powerShotLeft = new Vector2d(0,-22+14); // might be -22-14???
+    private Vector2d intakePre = new Vector2d(-12,-30);
+    private Vector2d intakePost = new Vector2d(-24,-30);
 
     private Vector2d wg2Pos = new Vector2d(-50,-30);
     private Vector2d line = new Vector2d(12,-30);
@@ -48,23 +43,23 @@ public class LastMinAuton extends LinearOpMode {
     private Trajectory wgDump1ToWG2;
     private Trajectory wg2ToWGDump2;
     private Trajectory wgDump2ToPark;
-    private Trajectory avoidRings1;
-    private Trajectory avoidRings2;
 
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
         initialize();
+
         wg.grab();
         sleep(2000);
         wg.lift();
         sleep(500);
         wg.stop();
-        waitForStart();
+        waitForStart(); // idk if this should be down here
+
         out.spinPowershot();
         Trajectory[] arr = {psLeftToPsMid,psMidToPsRight, psRightToIntakePre};
         drive.followTrajectory(startToPSLeft);
-        sleep(500);
-        for(int i=0;i<3;i++){
+
+        for(int i = 0; i < 3; i++) {
             out.pull();
             sleep(1500);
             out.push();
@@ -80,8 +75,7 @@ public class LastMinAuton extends LinearOpMode {
         sleep(2500);
         intake.stop();
 
-        //Shoots 1 ring that was intaked
-
+        //Shoots 1 ring that was intaken
         out.pull();
         sleep(750);
         out.stop();
@@ -94,7 +88,7 @@ public class LastMinAuton extends LinearOpMode {
         wg.lower();
         sleep(500);
         wg.stop();
-          /*
+
         //Goes to 2nd wg and picks up
         drive.followTrajectory(wgDump1ToWG2);
         wg.grab();
@@ -110,8 +104,8 @@ public class LastMinAuton extends LinearOpMode {
 
         //Drives to line
         drive.followTrajectory(wgDump2ToPark);
-        */
     }
+
     public void initialize(){
         drive = new SampleMecanumDrive(hardwareMap);
         wg = new WobbleGoal(hardwareMap);
@@ -120,20 +114,17 @@ public class LastMinAuton extends LinearOpMode {
         createTrajectories();
     }
 
-    public void createTrajectories(){
+    public void createTrajectories() {
         drive.setPoseEstimate(startPose);
-        avoidRings1 = drive.trajectoryBuilder(startPose)
-                .splineToLinearHeading(new Pose2d( -28,-15,Math.toRadians(-90)),0)
-                .build()
-        ;
+
         startToPSLeft = drive.trajectoryBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(powerShotLeft.getX(),powerShotLeft.getY(),Math.toRadians(180)),-7.0)
+                .splineToLinearHeading(new Pose2d(powerShotLeft.getX(), powerShotLeft.getY(), Math.toRadians(180)),-7.0)
                 .build();
         psLeftToPsMid = drive.trajectoryBuilder(startToPSLeft.end())
-                .strafeLeft(8)
+                .strafeRight(8) // pretty sure this is right
                 .build();
         psMidToPsRight = drive.trajectoryBuilder(psLeftToPsMid.end())
-                .strafeLeft(7)
+                .strafeRight(7)
                 .build();
         psRightToIntakePre = drive.trajectoryBuilder(psMidToPsRight.end())
                 .splineToConstantHeading(intakePre,0)
@@ -141,39 +132,20 @@ public class LastMinAuton extends LinearOpMode {
         intakePreToIntakePost = drive.trajectoryBuilder(psRightToIntakePre.end())
                 .splineToConstantHeading(intakePost,0)
                 .build();
-
         intakePostToOneRingShoot = drive.trajectoryBuilder(intakePreToIntakePost.end())
                 .back(12)
                 .build();
-
-        /*intakePostToWGDump1 = drive.trajectoryBuilder(intakePostToOneRingShoot.end())
-                .splineTo(
-                        wgDumpZone,Math.toRadians(45),
-                        new MinVelocityConstraint(
-                                Arrays.asList(
-                                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                        new MecanumVelocityConstraint(13, DriveConstants.TRACK_WIDTH)
-                                )
-                        ),
-                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL)
-
-                )
-                .build();*/
         intakePostToWGDump1 = drive.trajectoryBuilder(intakePostToOneRingShoot.end())
-                .splineTo(wgDumpZone,Math.toRadians(45))
+                .splineTo(wgDumpZone, Math.toRadians(45))
                 .build();
         wgDump1ToWG2 = drive.trajectoryBuilder(intakePostToWGDump1.end())
-                .splineTo(wg2Pos,Math.toRadians(0))
+                .splineTo(wg2Pos, Math.toRadians(0))
                 .build();
         wg2ToWGDump2 = drive.trajectoryBuilder(wgDump1ToWG2.end())
-                .splineTo(wgDumpZone,Math.toRadians(45))
+                .splineTo(wgDumpZone, Math.toRadians(45))
                 .build();
         wgDump2ToPark = drive.trajectoryBuilder(wg2ToWGDump2.end())
                 .splineToConstantHeading(line,0)
                 .build();
-
-
     }
 }
-
-
