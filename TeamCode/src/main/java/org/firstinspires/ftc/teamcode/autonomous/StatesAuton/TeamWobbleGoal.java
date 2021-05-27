@@ -41,15 +41,16 @@ public class TeamWobbleGoal extends LinearOpMode {
     public void makeTrajectories() {
         switch (stackSize) {
             case 0:
+                //TODO: Wrong starting pose. This starts the robot at the white line
                 startingPos = new Pose2d(12.0,-60.0+24,0.0);
                 dumpZone = drive.trajectoryBuilder(startingPos, true)
                         .splineToLinearHeading(wgPos1Ring, 0.0)
                         .build();
-
+                //Instead of lineToLinearHeading, consider using splineTo()
                 pickUp = drive.trajectoryBuilder(dumpZone.end(), false)
                         .lineToLinearHeading(wgStartPose)
                         .build();
-
+                //Instead of lineToLinearHeading, consider using splineTo()
                 dumpZone2 = drive.trajectoryBuilder(pickUp.end(), false)
                         .lineToLinearHeading(wgPos1Ring)
                         .build();
