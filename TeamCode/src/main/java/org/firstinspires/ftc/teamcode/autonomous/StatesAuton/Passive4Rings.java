@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.utils.DualShooterNoPID;
 import org.firstinspires.ftc.teamcode.utils.RRQuickStart.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.WobbleGoal;
 
@@ -16,6 +17,8 @@ public class Passive4Rings extends LinearOpMode {
     private SampleMecanumDrive drive;
     private Trajectory startToWGC;
     private Trajectory wgCToFinish;
+    private DualShooterNoPID outtake;
+
     @Override
     public void runOpMode(){
         initialize();
@@ -29,13 +32,25 @@ public class Passive4Rings extends LinearOpMode {
         drive.followTrajectory(startToWGC);
         wg.release();
         wg.stop();
+        //Turn to face the high goal
+        drive.turn(Math.toRadians(195));
+        outtake.spinHighGoal();
+        sleep(500);
+        for(int i=0;i<3;i++) {
+            outtake.pull();
+            sleep(125);
+            outtake.push();
+            if(i!=2){
+                sleep(125);
+            }
+        }
         drive.followTrajectory(wgCToFinish);
 
 
     }
     public void initialize(){
         wg = new WobbleGoal(hardwareMap);
-
+        outtake = new DualShooterNoPID(hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
         createTrajectories();
 
