@@ -13,15 +13,15 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public class RingScanner{
-    private static final int CAMERA_WIDTH = 1920; // width  of wanted camera resolution
-    private static final int CAMERA_HEIGHT = 1080; // height of wanted camera resolution
+    private static final int CAMERA_WIDTH = 1920;
+    private static final int CAMERA_HEIGHT = 1080;
 
-    private static final int HORIZON = 100; // horizon value to tune
+    private static final int HORIZON = 100;
 
-    private static final boolean DEBUG = false; // if debug is wanted, change to true
+    private static final boolean DEBUG = false;
 
-    private static final boolean USING_WEBCAM = false; // change to true if using webcam
-    private static final String WEBCAM_NAME = CONFIG.WEBCAM; // insert webcam name from configuration if using webcam
+    private static final boolean USING_WEBCAM = false;
+    private static final String WEBCAM_NAME = CONFIG.WEBCAM;
 
     private UGContourRingPipeline pipeline;
     private OpenCvCamera camera;

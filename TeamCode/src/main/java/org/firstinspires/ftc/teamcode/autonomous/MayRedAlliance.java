@@ -18,19 +18,21 @@ import java.util.Arrays;
 import java.util.Vector;
 
 public class MayRedAlliance extends LinearOpMode {
+    private final int Y_MULTIPLIER = 1;
     private WobbleGoal wg;
     private DualShooterNoPID out;
     private Intake intake;
     private SampleMecanumDrive drive;
 
-    private Pose2d startPose = new Pose2d(-60.0,-48.0,0.0);
-    private Vector2d wgDumpZone = new Vector2d(12,-54);
-    private Vector2d powerShotLeft = new Vector2d(0,-22+14); // might be -22-14???
-    private Vector2d intakePre = new Vector2d(-12,-30);
-    private Vector2d intakePost = new Vector2d(-24,-30);
+    private Pose2d startPose = new Pose2d(-60.0,-48.0*Y_MULTIPLIER,0.0);
+    //wqqqq
+    private Vector2d wgDumpZone = new Vector2d(30,-36*Y_MULTIPLIER);
+    private Vector2d powerShotLeft = new Vector2d(0,(-22+14)*Y_MULTIPLIER); // might be -22-14???
+    private Vector2d intakePre = new Vector2d(-12,-39*Y_MULTIPLIER);
+    private Vector2d intakePost = new Vector2d(-24,-39*Y_MULTIPLIER);
 
-    private Vector2d wg2Pos = new Vector2d(-50,-30);
-    private Vector2d line = new Vector2d(12,-30);
+    private Vector2d wg2Pos = new Vector2d(-36,-24*Y_MULTIPLIER);
+    private Vector2d line = new Vector2d(12,-30*Y_MULTIPLIER);
 
 
     private Trajectory startToPSLeft;
@@ -49,11 +51,11 @@ public class MayRedAlliance extends LinearOpMode {
         initialize();
 
         wg.grab();
-        sleep(2000);
+        sleep(250);
         wg.lift();
-        sleep(500);
+        sleep(250);
         wg.stop();
-        waitForStart(); // idk if this should be down here
+        waitForStart();
 
         out.spinPowershot();
         Trajectory[] arr = {psLeftToPsMid,psMidToPsRight, psRightToIntakePre};
@@ -61,7 +63,7 @@ public class MayRedAlliance extends LinearOpMode {
 
         for(int i = 0; i < 3; i++) {
             out.pull();
-            sleep(1500);
+            sleep(250);
             out.push();
             drive.followTrajectory(arr[i]);
         }
@@ -136,7 +138,7 @@ public class MayRedAlliance extends LinearOpMode {
                 .back(12)
                 .build();
         intakePostToWGDump1 = drive.trajectoryBuilder(intakePostToOneRingShoot.end())
-                .splineTo(wgDumpZone, Math.toRadians(45))
+                .splineTo(wgDumpZone, Math.toRadians(0))
                 .build();
         wgDump1ToWG2 = drive.trajectoryBuilder(intakePostToWGDump1.end())
                 .splineTo(wg2Pos, Math.toRadians(0))
