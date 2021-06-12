@@ -18,9 +18,9 @@ public class CONFIG {
     public static String PUSH = "push";
     public static String INTAKE = "intake";
     public static String BOTTOMROLLER = "bottomroller";
-    public static String LEFTVERTICAL = BACKLEFT;
-    public static String RIGHTVERTICAL = FRONTRIGHT;
-    public static String HORIZONTAL = BACKRIGHT;
+    public static String LEFTVERTICAL = FRONTLEFT;
+    public static String RIGHTVERTICAL = BACKRIGHT;
+    public static String HORIZONTAL = FRONTRIGHT;
     public static String WEBCAM = "Webcam 1";
     public static double COUNTS_PER_INCH = 307.699557;
     public static double COUNTS_PER_REVOLUTION =  537.6;
