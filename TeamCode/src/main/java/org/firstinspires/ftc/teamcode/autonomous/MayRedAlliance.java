@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 public class MayRedAlliance extends LinearOpMode {
-    private final int Y_MULTIPLIER = 1;
+    private int Y_MULTIPLIER = 1;
     private WobbleGoal wg;
     private DualShooterNoPID out;
     private Intake intake;
@@ -48,6 +48,16 @@ public class MayRedAlliance extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        telemetry.addLine("If on blue alliance, press the x button. If on red alliance, press the b button");
+        while(!gamepad1.x || !gamepad1.b){
+            if(gamepad1.x){
+                setYMULTIPLIERAndResetTraj(-1);
+            }
+            else{
+                setYMULTIPLIERAndResetTraj(1);
+            }
+        }
+
         initialize();
 
         wg.grab();
@@ -149,5 +159,18 @@ public class MayRedAlliance extends LinearOpMode {
         wgDump2ToPark = drive.trajectoryBuilder(wg2ToWGDump2.end())
                 .splineToConstantHeading(line,0)
                 .build();
+    }
+    public void setYMULTIPLIERAndResetTraj(int y){
+        Y_MULTIPLIER = y;
+        startPose = new Pose2d(-60.0,-48.0*Y_MULTIPLIER,0.0);
+        //wqqqq
+        wgDumpZone = new Vector2d(30,-36*Y_MULTIPLIER);
+        powerShotLeft = new Vector2d(0,(-22+14)*Y_MULTIPLIER); // might be -22-14???
+        intakePre = new Vector2d(-12,-39*Y_MULTIPLIER);
+        intakePost = new Vector2d(-24,-39*Y_MULTIPLIER);
+
+        wg2Pos = new Vector2d(-36,-24*Y_MULTIPLIER);
+        line = new Vector2d(12,-30*Y_MULTIPLIER);
+
     }
 }
